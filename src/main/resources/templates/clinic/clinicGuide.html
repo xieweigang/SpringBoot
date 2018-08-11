@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontent">
+    <div class="iblock2">
+        <div class="iline font-bold">指引单</div>
+    </div>
+    <div class="iblock imargin-buttom-10">
+        <div class="ipandding-10 iclearfix">
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">检查类型</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.guideName}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">门诊号码</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.cardNo}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">姓名</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.patientName}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">性别</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.patientSex}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">年龄</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.patientAge}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">申请号</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.applyId}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">执行科室</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.execDeptName}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">开单科室</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.billDeptName}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">开单时间</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.billDate}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">开单医生</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.billDoctName}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">金额</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.fee}">元</div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">预约时间</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.orderDate}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">临床诊断</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.diagnosis}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">检查项目</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.inspectItem}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">检查部位</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.inspectPoint}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">检查目的</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.inspectPurposes}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">注</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.remark}"></div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">地点</div>
+                <div class="ifloat-right iwidth70" th:text="${guide.location}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="iblock imargin-buttom-10">
+        <div class="iline iborder-solid-bottom itext-gray">
+            <div class="ipandding-left-10 iborder-solid-left">小项清单</div>
+        </div>
+        <div class="ipandding-10" th:each="item:${guide.items}" th:text="${item.itemName}">检查费</div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        // 页面标题
+        $("title").html("门诊指引单");
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

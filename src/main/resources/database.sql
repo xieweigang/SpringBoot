@@ -1,52 +1,74 @@
-CREATE DATABASE `student_test` ;
-USE `student_test`;
+CREATE DATABASE `sxpt-fybjy` ;
+USE `sxpt-fybjy`;
 
-DROP TABLE IF EXISTS `klass`;
-CREATE TABLE `klass` (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '班级编号',
-  `name` varchar(50) DEFAULT NULL COMMENT '班级名称',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
-insert  into `klass`(`id`,`name`) values (1,'一年一班');
-insert  into `klass`(`id`,`name`) values (2,'一年二班');
-insert  into `klass`(`id`,`name`) values (3,'一年三班');
-insert  into `klass`(`id`,`name`) values (16,'四年五班');
-insert  into `klass`(`id`,`name`) values (18,'二年一班1');
-insert  into `klass`(`id`,`name`) values (19,'二年一班2');
-insert  into `klass`(`id`,`name`) values (20,'二年一班3');
-insert  into `klass`(`id`,`name`) values (21,'二年一班4');
-insert  into `klass`(`id`,`name`) values (22,'二年一班5');
-insert  into `klass`(`id`,`name`) values (23,'二年一班6');
-insert  into `klass`(`id`,`name`) values (24,'二年一班7');
-insert  into `klass`(`id`,`name`) values (25,'二年一班8');
-insert  into `klass`(`id`,`name`) values (26,'二年一班9');
-insert  into `klass`(`id`,`name`) values (27,'二年一班0');
-insert  into `klass`(`id`,`name`) values (28,'二年一班1');
-insert  into `klass`(`id`,`name`) values (29,'二年一班2');
-insert  into `klass`(`id`,`name`) values (30,'二年一班3');
-insert  into `klass`(`id`,`name`) values (31,'二年一班4');
-insert  into `klass`(`id`,`name`) values (32,'二年一班5');
-insert  into `klass`(`id`,`name`) values (33,'二年一班6');
+SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student` (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '学生编号',
-  `name` varchar(50) DEFAULT NULL COMMENT '学生姓名',
-  `k_id` int(10) DEFAULT NULL COMMENT '班级编号',
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int(16) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `phone` varchar(32) COMMENT '手机号码',
+  `password` varchar(64) COMMENT '密码',
+  `hosp_id` varchar(64) COMMENT '医院编号',
+  `open_id` varchar(64) COMMENT '微信号',
+  `create_time` datetime COMMENT '创建时间',
+  `update_time` datetime COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
-insert  into `student`(`id`,`name`,`k_id`) values (1,'jack',1);
-insert  into `student`(`id`,`name`,`k_id`) values (2,'allen',1);
-insert  into `student`(`id`,`name`,`k_id`) values (3,'marry',2);
-insert  into `student`(`id`,`name`,`k_id`) values (4,'john',2);
-insert  into `student`(`id`,`name`,`k_id`) values (5,'gumble',2);
-insert  into `student`(`id`,`name`,`k_id`) values (6,'forest',2);
-insert  into `student`(`id`,`name`,`k_id`) values (7,'tailer',3);
-insert  into `student`(`id`,`name`,`k_id`) values (8,'smith',3);
-insert  into `student`(`id`,`name`,`k_id`) values (9,'hebe',1);
-insert  into `student`(`id`,`name`,`k_id`) values (10,'julia',3);
-insert  into `student`(`id`,`name`,`k_id`) values (11,'mason',2);
-insert  into `student`(`id`,`name`,`k_id`) values (12,'joe',2);
-insert  into `student`(`id`,`name`,`k_id`) values (14,'angel',2);
-insert  into `student`(`id`,`name`,`k_id`) values (15,'turky',2);
-insert  into `student`(`id`,`name`,`k_id`) values (16,'eve',2);
+) ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8;
+insert  into `user`(`phone`,`password`,`hosp_id`,`open_id`,`create_time`,`update_time`)
+values ('18305755230','111111','33060247132306811G1001','tester',NOW(),NOW());
+
+DROP TABLE IF EXISTS `patient`;
+CREATE TABLE `patient` (
+  `id` int(16) NOT NULL AUTO_INCREMENT COMMENT '患者id',
+  `user_id` varchar(16) COMMENT '用户id',
+  `card_no` varchar(32) COMMENT '卡号',
+  `card_type` varchar(8) COMMENT '卡类型，0医保卡2健康卡3省内外地社保卡',
+  `patient_id` varchar(32) COMMENT '患者编号',
+  `patient_name` varchar(32) COMMENT '患者姓名',
+  `patient_phone` varchar(32) COMMENT '患者手机',
+  `patient_idcard` varchar(32) COMMENT '身份证证号',
+  `create_time` datetime COMMENT '创建时间',
+  `update_time` datetime COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8;
+insert  into `patient`(`user_id`,`card_no`,`card_type`,`patient_id`,`patient_name`,`patient_phone`,`patient_idcard`,`create_time`,`update_time`)
+values (1000001,'A00349765','0','F87326657','谢伟刚','18305755230','330621198903256371',NOW(),NOW());
+
+DROP TABLE IF EXISTS `payment_order`;
+CREATE TABLE `payment_order` (
+  `order_id` varchar(64) COMMENT '订单号',
+  `order_type` varchar(8) COMMENT '订单类型，1诊间支付2住院缴费3测试缴费',
+  `order_title` varchar(64) COMMENT '订单类型名称',
+  `order_amount` varchar(32) COMMENT '订单金额，单位：分',
+  `order_status` varchar(8) COMMENT '订单状态，0未通知1通知成功2通知失败',
+  `card_no` varchar(32) COMMENT '卡号',
+  `card_type` varchar(8) COMMENT '卡类型，0医保卡2健康卡3省内外地社保卡',
+  `goods_id` varchar(128) COMMENT '商品单号，格式：1,2,3',
+  `goods_name` varchar(512) COMMENT '商品名称，格式：处方,处置,检验',
+  `trade_type` varchar(32) COMMENT '交易类型，1支付宝2微信3银行',
+  `accept_url` varchar(128) COMMENT '结果处理地址',
+  `notify_id` varchar(64) COMMENT '通知唯一id',
+  `serial_id` varchar(64) COMMENT '流水号',
+  `serial_status` varchar(8) COMMENT '流水状态',
+  `serial_packet` varchar(2048) COMMENT '流水报文',
+  `create_time` datetime COMMENT '创建时间',
+  `update_time` datetime COMMENT '修改时间',
+  PRIMARY KEY (`order_id`),
+  UNIQUE KEY (`goods_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `payment_refund`;
+CREATE TABLE `payment_refund` (
+  `refund_id` varchar(64) COMMENT '退款订单号',
+  `order_id` varchar(64) COMMENT '订单号',
+  `refund_type` varchar(8) COMMENT '退款类型，1异常退款2院方退款',
+  `refund_amount` varchar(64) COMMENT '退款金额，单位：分',
+  `refund_status` varchar(8) COMMENT '退款状态，0未通知1通知成功2通知失败',
+  `trade_type` varchar(32) COMMENT '交易类型，1支付宝2微信3银行',
+  `serial_id` varchar(64) COMMENT '流水号',
+  `serial_status` varchar(8) COMMENT '流水状态',
+  `serial_packet` varchar(2048) COMMENT '流水报文',
+  `create_time` datetime COMMENT '创建时间',
+  `update_time` datetime COMMENT '修改时间',
+  PRIMARY KEY (`refund_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -7,7 +7,7 @@ spring:
   #####数据库连接信息#####
   datasource:
     name: test
-    url: jdbc:mysql://localhost:3306/student_test
+    url: jdbc:mysql://localhost:3306/sxpt-fybjy
     username: root
     password:
     driver-class-name: com.mysql.jdbc.Driver
@@ -43,21 +43,3 @@ spring:
     content-type: text/html; charset=utf-8
     # 设置缓存为false 为了热部署 host refresh
     cache: false
-  #####设置freemarker模板#####
-  freemarker:
-    allow-request-override: false
-    # 开发过程建议关闭缓存
-    cache: false
-    check-template-location: false
-    charset: UTF-8
-    content-type: text/html; charset=utf-8
-    expose-request-attributes: false
-    expose-session-attributes: false
-    expose-spring-macro-helpers: false
-    # prefix: xx
-    request-context-attribute:
-    # settings:
-    # 默认后缀就是.ftl
-    # suffix: .ftl
-    # template-loader-path: classPath:/templates/
-    # view-names:

@@ -1,0 +1,305 @@
+/************** 整体布局开始 ***************/
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/*清楚页面浮动*/
+.iclearfix:before, .iclearfix:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.iclearfix {
+    zoom: 1;
+}
+
+html, body {
+    height: 100%;
+    margin: 0 auto;
+    max-width: 400px;
+    min-height: 500px;
+    background-color: #F6F6F6;
+    letter-spacing: 1px;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: black;
+}
+
+/*页面主体*/
+.icontainer {
+    /*保证footer是相对于container位置绝对定位*/
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    /*设置padding-bottom值大于等于footer的height值，以保证main的内容能够全部显示出来而不被footer遮盖；*/
+    padding-bottom: 100px;
+    box-sizing: border-box;
+}
+
+/*页头*/
+.iheader {
+    width: 100%;
+    height: 30px;
+    background-color: #f1f1e3;
+}
+
+/*内容*/
+.icontent {
+    width: 100%;
+    /*overflow: auto;*/
+}
+
+/*页尾*/
+.ifooter {
+    width: 100%;
+    height: 80px; /* footer的高度一定要是固定值*/
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+
+/************** 整体布局结束 ***************/
+/************** 页头布局开始 ***************/
+/*左功能*/
+.iheader-left {
+    float: left;
+    width: 10%;
+    padding: 5px 0 0 5px;
+    text-align: left;
+}
+
+/*标题块*/
+.iheader-center {
+    float: left;
+    width: 80%;
+    padding-top: 3px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/*右功能*/
+.iheader-right {
+    float: right;
+    width: 10%;
+    padding: 5px 5px 0 0;
+    text-align: right;
+}
+
+.iheader-image {
+    width: 20px;
+}
+
+/************** 页头布局结束 ***************/
+
+/************** 内容布局开始 ***************/
+/*内容块*/
+.iblock {
+    background: #FFFFFF;
+}
+
+.iblock2 {
+    background: #2892fa;
+    color: white;
+}
+
+.iblock3 {
+    background: #fffefa;
+}
+
+.iblock4 {
+    background: #fff1d6;
+}
+
+/*块级图标*/
+.iblock-image {
+    width: 30px;
+}
+
+.iblock-text {
+    font-size: 24px;
+    color: #333333;
+    text-align: center;
+}
+
+/*行*/
+.iline {
+    height: 40px;
+    padding: 10px;
+}
+
+/*线级图标*/
+.iline-image {
+    width: 20px;
+    border-radius: 3.5px;
+}
+
+/************** 内容布局结束 ***************/
+
+/************** 页尾布局开始 ***************/
+.ibutton {
+    background: #FF7B35;
+    border-radius: 4px;
+    width: 90%;
+    height: 45px;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #FFFFFF;
+    letter-spacing: 0.2px;
+    text-align: center;
+    border: 0px;
+}
+
+/************** 页尾布局结束 ***************/
+
+/*居中*/
+.itext-center {
+    text-align: center;
+}
+
+/*居右*/
+.itext-right {
+    text-align: right;
+}
+
+/*红色字体*/
+.itext-red {
+    color: red;
+}
+
+/*灰色字体*/
+.itext-gray {
+    color: grey;
+}
+
+/*链接*/
+.itext-link {
+    color: #2892fa;
+}
+
+/*实线*/
+.iborder-solid-top {
+    border-top: 1px solid #f1f1e3;
+}
+
+/*实线*/
+.iborder-solid-bottom {
+    border-bottom: 1px solid #f1f1e3;
+}
+
+/*虚线*/
+.iborder-dashed-top {
+    border-top: 1px dashed #f1f1e3;
+}
+
+/*左边框*/
+.iborder-solid-left {
+    border-left: 3px solid #2892fa;
+}
+
+/*tab选中*/
+.itab-selected {
+    border-bottom: 2px solid #2892fa;
+    color: #2892fa;
+    padding-bottom: 10px;
+}
+
+/*自定义输入框*/
+.iinput {
+    border: 0;
+    line-height: 25px;
+    font-size: 16px;
+    margin-top: -1px;
+}
+
+/*宽度10%*/
+.iwidth10 {
+    width: 10%;
+}
+
+/*宽度20%*/
+.iwidth20 {
+    width: 20%;
+}
+
+/*宽度30%*/
+.iwidth30 {
+    width: 30%;
+}
+
+/*宽度40%*/
+.iwidth40 {
+    width: 40%;
+}
+
+/*宽度50%*/
+.iwidth50 {
+    width: 50%;
+}
+
+/*宽度70%*/
+.iwidth70 {
+    width: 70%;
+}
+
+/*宽度80%*/
+.iwidth80 {
+    width: 80%;
+}
+
+/*靠左浮动*/
+.ifloat-left {
+    float: left;
+}
+
+/*靠右浮动*/
+.ifloat-right {
+    float: right;
+}
+
+/*背景色警告*/
+.ibg-warning {
+    background-color: #f0ad4e;
+}
+
+/*字体大小*/
+.ifont-16 {
+    font-size: 16px;
+}
+
+/*粗体*/
+.ifont-bold {
+    font-weight: bold;
+}
+
+/*边距调整*/
+.ipandding-10 {
+    padding: 10px;
+}
+
+/*边距调整*/
+.ipandding-left-10 {
+    padding-left: 10px;
+}
+
+/*边距调整*/
+.ipandding-right-10 {
+    padding-right: 10px;
+}
+
+/*边距调整*/
+.ipandding-corner {
+    padding: 20px 10px 10px 10px;
+}
+
+/*边距调整*/
+.imargin-buttom-10 {
+    margin-bottom: 10px;
+}

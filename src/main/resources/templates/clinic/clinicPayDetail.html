@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontent">
+    <div class="iblock2">
+        <div class="iline font-bold">
+            <div class="ifloat-left iwidth50" th:text="${clinic.isPayName}">待支付</div>
+            <div class="ifloat-right iwidth50 itext-right" th:text="${clinic.clinicName}">挂号付费</div>
+        </div>
+    </div>
+    <div class="iblock imargin-buttom-10">
+        <div class="iline iborder-solid-bottom" id="showGuide" th:attr="data-attr=${clinic.clinicChargeId}">
+            <div class="ifloat-left iwidth70">就诊信息</div>
+            <div class="ifloat-left iwidth20 itext-link itext-right">指引单</div>
+            <div class="ifloat-right iwidth10 itext-right">
+                <img class="iline-image" src="/images/right.png"/>
+            </div>
+        </div>
+        <div class="ipandding-10">
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">就诊号码</div>
+                <div class="ifloat-right iwidth70" th:text="${clinic.clinicChargeId}">A22342352</div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">就诊科室</div>
+                <div class="ifloat-right iwidth70" th:text="${clinic.deptName}">妇科</div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">就诊医生</div>
+                <div class="ifloat-right iwidth70" th:text="${clinic.doctName}">徐慧珠</div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">就诊时间</div>
+                <div class="ifloat-right iwidth70" th:text="${clinic.clinicDate}">2018.08.10 10:04:06</div>
+            </div>
+            <div class="iclearfix">
+                <div class="ifloat-left iwidth30 itext-gray">患者姓名</div>
+                <div class="ifloat-right iwidth70" th:text="${clinic.patientName}">许鹏</div>
+            </div>
+        </div>
+    </div>
+    <div class="iblock imargin-buttom-10">
+        <div class="iline iborder-solid-bottom itext-gray">
+            <div class="ipandding-left-10 iborder-solid-left">费用清单</div>
+        </div>
+        <div class="ipandding-10 iclearfix" th:each="item:${items}">
+            <div class="ifloat-left iwidth50" th:text="${item.itemName}"></div>
+            <div class="ifloat-left iwidth20" th:text="${item.itemQuantity}+${item.itemUnit}">1次</div>
+            <div class="ifloat-right iwidth30 itext-right itext-red">￥<span th:text="${item.itemPrice}">3</span>元</div>
+        </div>
+    </div>
+    <div class="iblock" th:if="${clinic.isPay}!='P'">
+        <div class="iline" th:if="${clinic.isConfirm}=='Y'">费用项目已完结</div>
+        <div class="iline" id="showConfirm" th:attr="data-attr=${clinic.clinicChargeId}"
+             th:if="${clinic.isConfirm}!='Y'">
+            <div class="ifloat-left iwidth70">医技护未确认</div>
+            <div class="ifloat-left iwidth20 itext-link itext-right">确认</div>
+            <div class="ifloat-right iwidth10 itext-right">
+                <img class="iline-image" src="/images/right.png"/>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        // 页面标题
+        $("title").html("门诊缴费详情");
+        // 点击获取指引单
+        $("#showGuide").click(function () {
+            var chargeId = $(this).attr('data-attr');
+            if (chargeId != null && chargeId != "") {
+                window.location.href = "../clinic/clinicGuide.htm?chargeId=" + chargeId;
+            }
+        });
+        // 医生确认
+        $('#showConfirm').on('click', function () {
+            var chargeId = $(this).attr('data-attr');
+            layer.prompt({
+                title: '请输入医技护工号'
+            }, function (value, index) {
+                layer.close(index);
+                if (chargeId != null && chargeId != "") {
+                    $.post("../clinic/clinicDoctorConfirm.htm", {
+                        chargeId: chargeId,
+                        doctorId: value
+                    }, function (res) {
+                        if (res.returnCode == 0) {
+                            window.location.reload();
+                        } else {
+                            layer.msg(res.returnInfo);
+                        }
+                    });
+                }
+            });
+        });
+    })
+    /*]]>*/
+</script>
+</body>
+</html>

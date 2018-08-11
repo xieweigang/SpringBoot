@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name='apple-touch-fullscreen' content='yes'/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no"/>
+    <link rel="icon" href="/images/logo.ico"/>
+    <link rel="stylesheet" href="/css/mobileSelect.css"/>
+    <link rel="stylesheet" href="/css/fybjy.css"/>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/mobileSelect.js"></script>
+    <script src="/layer/layer.js"></script>
+    <title>绍兴市妇幼保健院</title>
+</head>
+<body class="body">
+<div class="icontainer">
+    <div class="iheader" th:fragment="header">
+        <div class="iheader-left">
+            <a href="javascript:history.go(-1);">
+                <img class="iheader-image" src="/images/back.png"/>
+            </a>
+        </div>
+        <div class="iheader-center">门诊缴费</div>
+        <div class="iheader-right"></div>
+    </div>
+    <div class="icontent" th:fragment="content">MAIN</div>
+    <div class="ifooter" th:fragment="footer">FOOTER</div>
+</div>
+</body>
+</html>
