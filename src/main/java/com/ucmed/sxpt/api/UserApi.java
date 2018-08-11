@@ -8,10 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +26,7 @@ public class UserApi {
     @RequestMapping(value = "getUserList")
     @ApiOperation(value = "查找用户接口", httpMethod = "POST", notes = "查找用户接口", response = ApiResponse.class)
     public ResponseEntity<ApiResponse> insert(
-            @ApiParam(name = "phone", value = "卡号", required = true) @RequestParam(value = "phone") String phone) {
+            @ApiParam(name = "phone", value = "手机号码", required = true) @RequestParam(value = "phone") String phone) {
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("phone", phone);
         List<User> userList = userMapper.selectListByPhone(hashMap);
