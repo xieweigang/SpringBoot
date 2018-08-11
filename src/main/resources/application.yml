@@ -2,6 +2,11 @@
 #####服务器端口#####
 server:
   port: 8080
+  session:
+    timeout: 3600
+  tomcat:
+    uri-encoding: utf-8
+    max-threads: 1000
 #####Spring 配置#####
 spring:
   #####数据库连接信息#####
