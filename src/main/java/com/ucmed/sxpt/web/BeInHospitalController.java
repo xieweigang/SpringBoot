@@ -1,6 +1,7 @@
 package com.ucmed.sxpt.web;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/beInHospital")
 public class BeInHospitalController {
+    public static final Logger LOG = Logger.getLogger(FPaymentController.class);
 
     // 住院入口页面
     @RequestMapping(method = RequestMethod.GET, value = "/index.htm")

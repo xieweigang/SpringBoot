@@ -87,7 +87,7 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     // 分页+条件查询
-    @Select("select * from user where phone=#{phone}")
+    @Select("select * from user where phone=#{phone} ")
     @Results(value = {
             @Result(column = "id", property = "id", jdbcType = JdbcType.INTEGER, id = true),
             @Result(column = "phone", property = "phone", jdbcType = JdbcType.VARCHAR),

@@ -3,21 +3,14 @@ package com.ucmed.sxpt.web;
 import com.ucmed.sxpt.dao.PaymentOrderMapper;
 import com.ucmed.sxpt.entity.PaymentOrder;
 import com.ucmed.sxpt.util.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.log4j.Logger;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.thymeleaf.util.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Controller
@@ -32,6 +25,7 @@ public class FPaymentController {
     // 支付订单入口页面
     @RequestMapping(method = RequestMethod.GET, value = "/testPay.htm")
     public String testPay(ModelMap map) {
+        LOG.info("test");
         String kh = "A23455432";
         String klx = "0";
         String goodsId = "1,2,3";
@@ -53,6 +47,9 @@ public class FPaymentController {
             paymentOrder.setCreateTime(new Date());
             paymentOrder.setUpdateTime(new Date());
             paymentOrderMapper.insert(paymentOrder);
+        }else{
+            paymentOrder.setUpdateTime(new Date());
+            paymentOrderMapper.updateByPrimaryKey(paymentOrder);
         }
         map.put("orderId", paymentOrder.getOrderId());
         map.put("orderAmount", amount);

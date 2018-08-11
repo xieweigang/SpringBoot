@@ -1,6 +1,6 @@
-CREATE DATABASE `sxpt-fybjy` ;
+DROP DATABASE `sxpt-fybjy`;
+CREATE DATABASE `sxpt-fybjy` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `sxpt-fybjy`;
-
 SET FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS `user`;
