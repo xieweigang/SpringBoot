@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontent">
+    <div class="iblock imargin-buttom-10">
+        <div class="iline">
+            <div id="tab1" class="ifloat-left iwidth50 itext-center">待支付</div>
+            <div id="tab2" class="ifloat-left iwidth50 itext-center">已支付</div>
+        </div>
+    </div>
+    <div id="Session1">
+        <div class="iblock imargin-buttom-10" th:if="${notPayList.size()}==0">
+            <div class="iline">没有查到相关的信息</div>
+        </div>
+        <div class="iblock imargin-buttom-10" th:each="clinic:${notPayList}">
+            <div class="iline iborder-solid-bottom" th:attr="data-attr=${clinic.clinicChargeId}">
+                <div class="ifloat-left iwidth70" th:text="${clinic.clinicName}">挂号费</div>
+                <div class="ifloat-left iwidth20 itext-link itext-right">费用详情</div>
+                <div class="ifloat-right iwidth10 itext-right">
+                    <img class="iline-image" src="/images/right.png"/>
+                </div>
+            </div>
+            <div class="ipandding-10">
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth30 itext-gray">时间</div>
+                    <div class="ifloat-right iwidth70" th:text="${clinic.clinicDate}">2018.08.10 10:04:06</div>
+                </div>
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth30 itext-gray">就诊人</div>
+                    <div class="ifloat-right iwidth70" th:text="${clinic.patientName}">李进</div>
+                </div>
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth30 itext-gray">付款金额</div>
+                    <div class="ifloat-right iwidth70 itext-red">￥<span th:text="${clinic.clinicCharge}">0.1</span>元
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="iblock imargin-buttom-10">
+            <div class="iline">
+                <div class="ifloat-left">费用合计</div>
+                <div class="ifloat-right itext-red">￥<span th:text="${notPayTotal}">0.1</span>元</div>
+            </div>
+        </div>
+        <div class="ifooter">
+            <div class="itext-center">
+                <button class="ibutton" id="btn1">合并支付</button>
+            </div>
+        </div>
+    </div>
+    <div id="Session2">
+        <div class="iblock imargin-buttom-10" th:if="${hasPayList.size()}==0">
+            <div class="iline">没有查到相关的信息</div>
+        </div>
+        <div class="iblock imargin-buttom-10" th:each="clinic:${hasPayList}">
+            <div class="iline iborder-solid-bottom" th:attr="data-attr=${clinic.clinicChargeId}">
+                <div class="ifloat-left iwidth70" th:text="${clinic.clinicName}">挂号费</div>
+                <div class="ifloat-left iwidth20 itext-link itext-right">费用详情</div>
+                <div class="ifloat-right iwidth10 itext-right">
+                    <img class="iline-image" src="/images/right.png"/>
+                </div>
+            </div>
+            <div class="ipandding-10">
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth30 itext-gray">时间</div>
+                    <div class="ifloat-right iwidth70" th:text="${clinic.clinicDate}">2018.08.10 10:04:06</div>
+                </div>
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth30 itext-gray">就诊人</div>
+                    <div class="ifloat-right iwidth70" th:text="${clinic.patientName}">李进</div>
+                </div>
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth30 itext-gray">付款金额</div>
+                    <div class="ifloat-right iwidth70 itext-red">￥<span th:text="${clinic.clinicCharge}">0.1</span>元
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        var clinics = [[${clinics}]];
+        var notPayList = [[${notPayList}]];
+        var notPayTotal = [[${notPayTotal}]];
+        // 页面标题
+        $("title").html("门诊缴费列表");
+        // 选项卡切换
+        $('#tab1').addClass('itab-selected');
+        $('#Session2').hide();
+        $("#tab1").click(function () {
+            $('#tab1').addClass('itab-selected');
+            $('#tab2').removeClass('itab-selected');
+            $('#Session1').show();
+            $('#Session2').hide();
+        });
+        $("#tab2").click(function () {
+            $('#tab1').removeClass('itab-selected');
+            $('#tab2').addClass('itab-selected');
+            $('#Session1').hide();
+            $('#Session2').show();
+        });
+        // 点击获取详情
+        $(".iline").click(function () {
+            var chargeId = $(this).attr('data-attr');
+            if (chargeId != null && chargeId != "") {
+                for (i = 0; i < clinics.length; i++) {
+                    if (chargeId == clinics[i].clinicChargeId) {
+                        var clinicString = JSON.stringify(clinics[i]);
+                        window.location.href = "../clinic/clinicPayDetail.htm?clinic=" + encodeURI(clinicString);
+                    }
+                }
+            }
+        });
+        // 确认支付
+        $("#btn1").click(function () {
+            var goodsId = notPayList[0].clinicChargeId;
+            var goodsName = notPayList[0].clinicName;
+            for (i = 1; i < notPayList.length; i++) {
+                clinics += "," + notPayList[i].clinicChargeId
+            }
+            window.location.href = "../clinic/clinicPayBudget.htm?amount=" + notPayTotal + "&goodsId=" + goodsId + "&goodsName=" + goodsName;
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

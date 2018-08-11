@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontent">
+    <div class="iblock ipandding-10 iborder-solid-bottom">
+        <div class="itext-center">
+            <img class="iblock-image" src="/images/success.png"/>
+        </div>
+        <div class="iblock-text">支付成功</div>
+    </div>
+    <div class="iblock">
+        <div class="iline" id="showConfirm">
+            <div class="ifloat-left iwidth70">缴费已完成</div>
+            <div class="ifloat-left iwidth20 itext-link itext-right">支付记录</div>
+            <div class="ifloat-right iwidth10 itext-right">
+                <img class="iline-image" src="/images/right.png"/>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        $("title").html("支付成功");
+        $("#btn1").click(function () {
+            window.location.href = "../payment/payList.htm";
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
