@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.thymeleaf.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -18,17 +20,20 @@ import java.util.*;
 public class FPaymentController {
     public static final Logger LOG = Logger.getLogger(FPaymentController.class);
     public static final String NOTIFY_URL = GlobalConstants.WEB_URL + "/payment/payNotify.htm";
-    public static final String RETURN_URL = GlobalConstants.WEB_URL + "/payment/returnUrl.htm";
+    public static final String RETURN_URL = GlobalConstants.WEB_URL + "/payment/payReturn.htm";
     @Autowired
     private PaymentOrderMapper paymentOrderMapper;
 
     // 支付订单入口页面
     @RequestMapping(method = RequestMethod.GET, value = "/testPay.htm")
-    public String testPay(ModelMap map) {
+    public String testPay(HttpServletRequest request, ModelMap map) {
         LOG.info("test");
         String kh = "A23455432";
         String klx = "0";
-        String goodsId = "1,2,3";
+        String goodsId = "1,2,3,4";
+        if (!StringUtils.isEmpty(request.getParameter("goodsId"))) {
+            goodsId = request.getParameter("goodsId");
+        }
         String goodsName = "检查费，门诊费，化验费";
         double amount = 0.01;
         // 本地订单查询，没找到则新建订单
@@ -44,10 +49,11 @@ public class FPaymentController {
             paymentOrder.setCardType(klx); // 卡类型0 医保卡2 健康卡3 省内外地社保卡
             paymentOrder.setGoodsId(goodsId); // 商品单号，格式：1,2,3
             paymentOrder.setGoodsName(goodsName); // 商品名称，格式：处方,处置,检验
+            paymentOrder.setTradeType("2"); // 交易类型，1支付宝2微信3银行
             paymentOrder.setCreateTime(new Date());
             paymentOrder.setUpdateTime(new Date());
             paymentOrderMapper.insert(paymentOrder);
-        }else{
+        } else {
             paymentOrder.setUpdateTime(new Date());
             paymentOrderMapper.updateByPrimaryKey(paymentOrder);
         }
@@ -139,13 +145,17 @@ public class FPaymentController {
         String notifyId = request.getParameter("notifyId");
         String serialId = request.getParameter("seqId");
         String serialStatus = request.getParameter("status");
-        String serialPacket = request.getQueryString();
+        String serialPacket = request.getQueryString(); // 获取参数，只支持GET请求
         LOG.info("请求地址：" + acceptUrl);
         LOG.info("请求报文：" + serialPacket);
         PaymentOrder paymentOrder = paymentOrderMapper.selectByPrimaryKey(orderId);
         if (paymentOrder != null) {
             // 已经通知医院，不再变更
             if (!paymentOrder.getOrderStatus().equals("0")) {
+                return paymentOrder;
+            }
+            // 报文已经存储，即已经收到返回页面
+            if (!StringUtils.isEmpty(paymentOrder.getSerialPacket())) {
                 return paymentOrder;
             }
             paymentOrder.setAcceptUrl(acceptUrl); // 结果处理地址

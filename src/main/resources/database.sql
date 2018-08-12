@@ -20,7 +20,7 @@ values ('18305755230','111111','33060247132306811G1001','tester',NOW(),NOW());
 DROP TABLE IF EXISTS `patient`;
 CREATE TABLE `patient` (
   `id` int(16) NOT NULL AUTO_INCREMENT COMMENT '患者id',
-  `user_id` varchar(16) COMMENT '用户id',
+  `user_id` int(16) COMMENT '用户id',
   `card_no` varchar(32) COMMENT '卡号',
   `card_type` varchar(8) COMMENT '卡类型，0医保卡2健康卡3省内外地社保卡',
   `patient_id` varchar(32) COMMENT '患者编号',
@@ -37,7 +37,7 @@ values (1000001,'A00349765','0','F87326657','谢伟刚','18305755230','330621198
 DROP TABLE IF EXISTS `payment_order`;
 CREATE TABLE `payment_order` (
   `order_id` varchar(64) COMMENT '订单号',
-  `order_type` varchar(8) COMMENT '订单类型，1诊间支付2住院缴费3测试缴费',
+  `order_type` varchar(32) COMMENT '订单类型，1诊间支付2住院缴费3测试缴费',
   `order_title` varchar(64) COMMENT '订单类型名称',
   `order_amount` varchar(32) COMMENT '订单金额，单位：分',
   `order_status` varchar(8) COMMENT '订单状态，0未通知1通知成功2通知失败',
@@ -49,7 +49,7 @@ CREATE TABLE `payment_order` (
   `accept_url` varchar(128) COMMENT '结果处理地址',
   `notify_id` varchar(64) COMMENT '通知唯一id',
   `serial_id` varchar(64) COMMENT '流水号',
-  `serial_status` varchar(8) COMMENT '流水状态',
+  `serial_status` varchar(32) COMMENT '流水状态',
   `serial_packet` varchar(2048) COMMENT '流水报文',
   `create_time` datetime COMMENT '创建时间',
   `update_time` datetime COMMENT '修改时间',
@@ -66,7 +66,7 @@ CREATE TABLE `payment_refund` (
   `refund_status` varchar(8) COMMENT '退款状态，0未通知1通知成功2通知失败',
   `trade_type` varchar(32) COMMENT '交易类型，1支付宝2微信3银行',
   `serial_id` varchar(64) COMMENT '流水号',
-  `serial_status` varchar(8) COMMENT '流水状态',
+  `serial_status` varchar(32) COMMENT '流水状态',
   `serial_packet` varchar(2048) COMMENT '流水报文',
   `create_time` datetime COMMENT '创建时间',
   `update_time` datetime COMMENT '修改时间',
