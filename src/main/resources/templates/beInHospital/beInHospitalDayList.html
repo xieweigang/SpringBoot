@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontainer">
+    <div class="icontent">
+        <div class="imargin-buttom-10"></div>
+        <div class="iblock">
+            <div class="iline iborder-solid-bottom" data-attribute="2018-07-01">
+                <div class="ifloat-left">2018-07-01</div>
+                <div class="ifloat-right itext-right">
+                    <img class="iline-image" src="/images/right.png"/>
+                </div>
+            </div>
+            <div class="iline iborder-solid-bottom" data-attribute="2018-07-02">
+                <div class="ifloat-left">2018-07-02</div>
+                <div class="ifloat-right itext-right">
+                    <img class="iline-image" src="/images/right.png"/>
+                </div>
+            </div>
+            <div class="iline iborder-solid-bottom" data-attribute="2018-07-03">
+                <div class="ifloat-left">2018-07-03</div>
+                <div class="ifloat-right itext-right">
+                    <img class="iline-image" src="/images/right.png"/>
+                </div>
+            </div>
+            <div class="iline iborder-solid-bottom" data-attribute="2018-07-04">
+                <div class="ifloat-left">2018-07-04</div>
+                <div class="ifloat-right itext-right">
+                    <img class="iline-image" src="/images/right.png"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        // 点击获取详情
+        $(".iline").click(function () {
+            var key = $(this).attr('data-attribute');
+            if (key != null && key != "") {
+                window.location.href = "../beInHospital/beInHospitalDayDetail.htm?key=" + key;
+            }
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

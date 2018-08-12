@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontainer">
+    <div class="icontent">
+        <div class="imargin-buttom-10"></div>
+        <div class="iblock iborder-solid-bottom iclearfix" data-attribute="1">
+            <div class="ifloat-left ipandding-10">
+                <div>肝病感染内科</div>
+                <div class="itext-gray">入院时间 2016-05-09</div>
+            </div>
+            <div class="ifloat-right ipandding-corner">
+                <img class="iline-image" src="/images/right.png"/>
+            </div>
+        </div>
+        <div class="iblock iborder-solid-bottom iclearfix" data-attribute="2">
+            <div class="ifloat-left ipandding-10">
+                <div>肾内科</div>
+                <div class="itext-gray">入院时间 2016-05-09</div>
+            </div>
+            <div class="ifloat-right ipandding-corner">
+                <img class="iline-image" src="/images/right.png"/>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        // 点击获取详情
+        $(".iblock").click(function () {
+            var key = $(this).attr('data-attribute');
+            if (key != null && key != "") {
+                window.location.href = "../beInHospital/beInHospitalDetail.htm?key=" + key;
+            }
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

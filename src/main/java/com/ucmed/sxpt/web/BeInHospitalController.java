@@ -18,32 +18,32 @@ public class BeInHospitalController {
     // 住院入口页面
     @RequestMapping(method = RequestMethod.GET, value = "/index.htm")
     public String index(HttpServletRequest request, HttpSession session, ModelMap map) {
-        map.put("kh", "H32334244");
+        map.put("kh", "010");
         map.put("klx", "3");
-        return "beInHospital/index.html";
+        return "beInHospital/index";
     }
 
     // 住院列表页面
     @RequestMapping(method = RequestMethod.GET, value = "/beInHospitalList.htm")
     public String beInHospitalList(HttpServletRequest request, ModelMap map) {
-        return "beInHospital/beInHospitalList.vm";
+        return "beInHospital/beInHospitalList";
     }
 
     // 住院详情页面
     @RequestMapping(method = RequestMethod.GET, value = "/beInHospitalDetail.htm")
     public String beInHospitalDetail(HttpServletRequest request, ModelMap map) {
-        return "beInHospital/beInHospitalDetail.vm";
+        return "beInHospital/beInHospitalDetail";
     }
 
     // 日期清单列表
     @RequestMapping(method = RequestMethod.GET, value = "/beInHospitalDayList.htm")
     public String beInHospitalDayList(HttpServletRequest request, ModelMap map) {
-        return "beInHospital/beInHospitalDayList.vm";
+        return "beInHospital/beInHospitalDayList";
     }
 
     // 每日清单页面
     @RequestMapping(method = RequestMethod.GET, value = "/beInHospitalDayDetail.htm")
     public String beInHospitalDayDetail(HttpServletRequest request, ModelMap map) {
-        return "beInHospital/beInHospitalDayDetail.vm";
+        return "beInHospital/beInHospitalDayDetail";
     }
 }
