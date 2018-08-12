@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontainer">
+    <div class="icontent">
+        <div class="imargin-buttom-10"></div>
+        <div class="iblock imargin-buttom-10">
+            <div class="iline iborder-solid-bottom itext-gray">
+                <div class="ipandding-left-10 iborder-solid-left">费用清单</div>
+            </div>
+            <div class="ipandding-10">
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth50">氯化钠针0.9%：10ml</div>
+                    <div class="ifloat-left iwidth20">30ml</div>
+                    <div class="ifloat-right iwidth30 itext-right">5.00元</div>
+                </div>
+                <div class="iclearfix">
+                    <div class="ifloat-left iwidth50">利卡多因针2%：5ml</div>
+                    <div class="ifloat-left iwidth20">20ml</div>
+                    <div class="ifloat-right iwidth30 itext-right">5.00元</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        // 点击获取详情
+        $(".iline").click(function () {
+            var key = $(this).attr('data-attribute');
+            if (key != null && key != "") {
+                window.location.href = "../beInHospital/beInHospitalDayDetail.htm?key=" + key;
+            }
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
