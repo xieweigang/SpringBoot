@@ -1,5 +1,6 @@
 package com.ucmed.sxpt.util;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ucmed.sxpt.entity.PaymentOrder;
 import org.apache.log4j.Logger;
@@ -9,10 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class PaymentConfig {
     public static final Logger LOG = Logger.getLogger(PaymentConfig.class);
@@ -45,7 +43,7 @@ public class PaymentConfig {
         return sign;
     }
 
-    // 生成支付地址
+    // 生成支付报文
     public static String gePayOrderUrl(String merOrderId, String totalAmount, String notifyUrl, String returnUrl) {
         // 请求入参处理
         Map<String, String> treeMap = new TreeMap<>();
@@ -76,7 +74,7 @@ public class PaymentConfig {
         return payOrderUrl;
     }
 
-    // 生产退款报文
+    // 生成退款报文
     public static JSONObject getPayRefundJson(String merOrderId, String refundOrderId, String refundAmount) {
         // 请求入参处理
         Map<String, String> treeMap = new TreeMap<>();
@@ -101,7 +99,34 @@ public class PaymentConfig {
         return payRefundJson;
     }
 
-    // 支付成功校验
+    // 获取支付或退款响应报文
+    public static Map<String, String> getPocket(HttpServletRequest request, JSONObject res) {
+        Map<String, String> treeMap = new TreeMap<>();
+        if (request != null) {
+            Enumeration<String> paraNames = request.getParameterNames();
+            for (Enumeration<String> e = paraNames; e.hasMoreElements(); ) {
+                String thisName = e.nextElement().toString();
+                String thisValue = request.getParameter(thisName);
+                try {
+                    thisValue = new String(thisValue.getBytes("iso-8859-1"), "utf-8");
+                } catch (UnsupportedEncodingException e1) {
+                    e1.printStackTrace();
+                }
+                treeMap.put(thisName, thisValue);
+            }
+        } else if (res != null) {
+            Map<String, String> map = (Map) JSON.parse(String.valueOf(res));
+            for (Map.Entry<String, String> mapEntry : map.entrySet()) {
+                String thisName = mapEntry.getKey();
+                String thisValue = String.valueOf(mapEntry.getValue());
+                treeMap.put(thisName, thisValue);
+            }
+        }
+        LOG.info("响应报文：" + treeMap);
+        return treeMap;
+    }
+
+    // 支付通知报文校验
     public static boolean checkSign(HttpServletRequest request) {
         Map<String, String> treeMap = new TreeMap<>();
         String sign1 = "";
@@ -115,6 +140,35 @@ public class PaymentConfig {
             } catch (UnsupportedEncodingException e1) {
                 e1.printStackTrace();
             }
+            if (thisName.equals("sign")) {
+                sign1 = thisValue;
+            } else {
+                treeMap.put(thisName, thisValue);
+            }
+        }
+        LOG.info("Source Sign:" + sign1);
+        String sign2 = getSign(treeMap);
+        LOG.info("Caculate Sign:" + sign2);
+        String message = "入参列表：";
+        for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
+            message += mapEntry.getKey() + "=" + mapEntry.getValue() + "  ";
+        }
+        LOG.info(message);
+        if (!sign1.toUpperCase().equals(sign2.toUpperCase())) {
+            LOG.error("验证签名失败!");
+            return false;
+        }
+        return true;
+    }
+
+    // 退款通知报文校验
+    public static boolean checkSign(JSONObject res) {
+        Map<String, String> treeMap = new TreeMap<>();
+        String sign1 = "";
+        Map<String, String> map = (Map) JSON.parse(String.valueOf(res));
+        for (Map.Entry<String, String> mapEntry : map.entrySet()) {
+            String thisName = mapEntry.getKey();
+            String thisValue = String.valueOf(mapEntry.getValue());
             if (thisName.equals("sign")) {
                 sign1 = thisValue;
             } else {
@@ -150,12 +204,12 @@ public class PaymentConfig {
         return msgType;
     }
 
-    // 支付方式转换
+    // 支付订单号生成
     public static String getOrderId() {
         return PaymentConfig.MSG_ID + String.valueOf(new Date().getTime()) + "6011";
     }
 
-    // 支付方式转换
+    // 退款订单号生成
     public static String getRefundId() {
         return PaymentConfig.MSG_ID + String.valueOf(new Date().getTime()) + "6012";
     }

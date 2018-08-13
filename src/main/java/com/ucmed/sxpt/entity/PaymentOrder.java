@@ -79,6 +79,16 @@ public class PaymentOrder {
     private String serialPacket;
 
     /**
+     * 退款订单号，格式：1,2,3
+     */
+    private String refundId;
+
+    /**
+     * 退款金额，单位：分
+     */
+    private String refundAmount;
+
+    /**
      * 创建时间
      */
     private Date createTime;
@@ -326,6 +336,38 @@ public class PaymentOrder {
      */
     public void setSerialPacket(String serialPacket) {
         this.serialPacket = serialPacket == null ? null : serialPacket.trim();
+    }
+
+    /**
+     * 退款订单号，格式：1,2,3
+     * @return refund_id 退款订单号，格式：1,2,3
+     */
+    public String getRefundId() {
+        return refundId;
+    }
+
+    /**
+     * 退款订单号，格式：1,2,3
+     * @param refundId 退款订单号，格式：1,2,3
+     */
+    public void setRefundId(String refundId) {
+        this.refundId = refundId == null ? null : refundId.trim();
+    }
+
+    /**
+     * 退款金额，单位：分
+     * @return refund_amount 退款金额，单位：分
+     */
+    public String getRefundAmount() {
+        return refundAmount;
+    }
+
+    /**
+     * 退款金额，单位：分
+     * @param refundAmount 退款金额，单位：分
+     */
+    public void setRefundAmount(String refundAmount) {
+        this.refundAmount = refundAmount == null ? null : refundAmount.trim();
     }
 
     /**

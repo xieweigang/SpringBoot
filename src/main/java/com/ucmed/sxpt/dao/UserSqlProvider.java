@@ -7,11 +7,11 @@ public class UserSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String insertSelective(User record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("user");
+        sql.INSERT_INTO("t_user");
         
         if (record.getId() != null) {
             sql.VALUES("id", "#{id,jdbcType=INTEGER}");
@@ -46,11 +46,11 @@ public class UserSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String updateByPrimaryKeySelective(User record) {
         SQL sql = new SQL();
-        sql.UPDATE("user");
+        sql.UPDATE("t_user");
         
         if (record.getPhone() != null) {
             sql.SET("phone = #{phone,jdbcType=VARCHAR}");

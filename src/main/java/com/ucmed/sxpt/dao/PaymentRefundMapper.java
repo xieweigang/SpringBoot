@@ -14,20 +14,20 @@ import org.apache.ibatis.type.JdbcType;
 public interface PaymentRefundMapper {
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Delete({
-        "delete from payment_refund",
+        "delete from t_payment_refund",
         "where refund_id = #{refundId,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(String refundId);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Insert({
-        "insert into payment_refund (refund_id, order_id, ",
+        "insert into t_payment_refund (refund_id, order_id, ",
         "refund_type, refund_amount, ",
         "refund_status, trade_type, ",
         "serial_id, serial_status, ",
@@ -44,20 +44,20 @@ public interface PaymentRefundMapper {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @InsertProvider(type=PaymentRefundSqlProvider.class, method="insertSelective")
     int insertSelective(PaymentRefund record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Select({
         "select",
         "refund_id, order_id, refund_type, refund_amount, refund_status, trade_type, ",
         "serial_id, serial_status, serial_packet, create_time, update_time",
-        "from payment_refund",
+        "from t_payment_refund",
         "where refund_id = #{refundId,jdbcType=VARCHAR}"
     })
     @Results({
@@ -77,17 +77,17 @@ public interface PaymentRefundMapper {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @UpdateProvider(type=PaymentRefundSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(PaymentRefund record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Update({
-        "update payment_refund",
+        "update t_payment_refund",
         "set order_id = #{orderId,jdbcType=VARCHAR},",
           "refund_type = #{refundType,jdbcType=VARCHAR},",
           "refund_amount = #{refundAmount,jdbcType=VARCHAR},",

@@ -3,8 +3,8 @@ CREATE DATABASE `sxpt-fybjy` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unico
 USE `sxpt-fybjy`;
 SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+DROP TABLE IF EXISTS `t_user`;
+CREATE TABLE `t_user` (
   `id` int(16) NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `phone` varchar(32) COMMENT '手机号码',
   `password` varchar(64) COMMENT '密码',
@@ -14,11 +14,11 @@ CREATE TABLE `user` (
   `update_time` datetime COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8;
-insert  into `user`(`phone`,`password`,`hosp_id`,`open_id`,`create_time`,`update_time`)
+insert  into `t_user`(`phone`,`password`,`hosp_id`,`open_id`,`create_time`,`update_time`)
 values ('18305755230','111111','33060247132306811G1001','tester',NOW(),NOW());
 
-DROP TABLE IF EXISTS `patient`;
-CREATE TABLE `patient` (
+DROP TABLE IF EXISTS `t_patient`;
+CREATE TABLE `t_patient` (
   `id` int(16) NOT NULL AUTO_INCREMENT COMMENT '患者id',
   `user_id` int(16) COMMENT '用户id',
   `card_no` varchar(32) COMMENT '卡号',
@@ -31,11 +31,11 @@ CREATE TABLE `patient` (
   `update_time` datetime COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8;
-insert  into `patient`(`user_id`,`card_no`,`card_type`,`patient_id`,`patient_name`,`patient_phone`,`patient_idcard`,`create_time`,`update_time`)
+insert  into `t_patient`(`user_id`,`card_no`,`card_type`,`patient_id`,`patient_name`,`patient_phone`,`patient_idcard`,`create_time`,`update_time`)
 values (1000001,'A00349765','0','F87326657','谢伟刚','18305755230','330621198903256371',NOW(),NOW());
 
-DROP TABLE IF EXISTS `payment_order`;
-CREATE TABLE `payment_order` (
+DROP TABLE IF EXISTS `t_payment_order`;
+CREATE TABLE `t_payment_order` (
   `order_id` varchar(64) COMMENT '订单号',
   `order_type` varchar(32) COMMENT '订单类型，1诊间支付2住院缴费3测试缴费',
   `order_title` varchar(64) COMMENT '订单类型名称',
@@ -51,14 +51,16 @@ CREATE TABLE `payment_order` (
   `serial_id` varchar(64) COMMENT '流水号',
   `serial_status` varchar(32) COMMENT '流水状态',
   `serial_packet` varchar(2048) COMMENT '流水报文',
+  `refund_id` varchar(128) COMMENT '退款订单号，格式：1,2,3',
+  `refund_amount` varchar(32) COMMENT '退款金额，单位：分',
   `create_time` datetime COMMENT '创建时间',
   `update_time` datetime COMMENT '修改时间',
   PRIMARY KEY (`order_id`),
   UNIQUE KEY (`goods_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `payment_refund`;
-CREATE TABLE `payment_refund` (
+DROP TABLE IF EXISTS `t_payment_refund`;
+CREATE TABLE `t_payment_refund` (
   `refund_id` varchar(64) COMMENT '退款订单号',
   `order_id` varchar(64) COMMENT '订单号',
   `refund_type` varchar(8) COMMENT '退款类型，1异常退款2院方退款',

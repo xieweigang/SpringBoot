@@ -14,25 +14,25 @@ import org.apache.ibatis.type.JdbcType;
 public interface PatientMapper {
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Delete({
-        "delete from patient",
+        "delete from t_patient",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int deleteByPrimaryKey(Integer id);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Insert({
-        "insert into patient (id, user_id, ",
+        "insert into t_patient (id, user_id, ",
         "card_no, card_type, ",
         "patient_id, patient_name, ",
         "patient_phone, patient_idcard, ",
         "create_time, update_time)",
-        "values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, ",
+        "values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, ",
         "#{cardNo,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, ",
         "#{patientId,jdbcType=VARCHAR}, #{patientName,jdbcType=VARCHAR}, ",
         "#{patientPhone,jdbcType=VARCHAR}, #{patientIdcard,jdbcType=VARCHAR}, ",
@@ -42,25 +42,25 @@ public interface PatientMapper {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @InsertProvider(type=PatientSqlProvider.class, method="insertSelective")
     int insertSelective(Patient record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Select({
         "select",
         "id, user_id, card_no, card_type, patient_id, patient_name, patient_phone, patient_idcard, ",
         "create_time, update_time",
-        "from patient",
+        "from t_patient",
         "where id = #{id,jdbcType=INTEGER}"
     })
     @Results({
         @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
-        @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="user_id", property="userId", jdbcType=JdbcType.INTEGER),
         @Result(column="card_no", property="cardNo", jdbcType=JdbcType.VARCHAR),
         @Result(column="card_type", property="cardType", jdbcType=JdbcType.VARCHAR),
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.VARCHAR),
@@ -74,18 +74,18 @@ public interface PatientMapper {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @UpdateProvider(type=PatientSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(Patient record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Update({
-        "update patient",
-        "set user_id = #{userId,jdbcType=VARCHAR},",
+        "update t_patient",
+        "set user_id = #{userId,jdbcType=INTEGER},",
           "card_no = #{cardNo,jdbcType=VARCHAR},",
           "card_type = #{cardType,jdbcType=VARCHAR},",
           "patient_id = #{patientId,jdbcType=VARCHAR},",
