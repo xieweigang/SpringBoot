@@ -74,7 +74,7 @@ public class FPaymentController {
             return "public/failed";
         }
         // 订单已支付
-        if (paymentOrder.getSerialStatus().equals("TRADE_SUCCESS")) {
+        if (!paymentOrder.getOrderStatus().equals("0")) {
             map.put("message", "订单已成功支付");
             return "public/failed";
         }
