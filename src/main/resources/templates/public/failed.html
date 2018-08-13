@@ -13,18 +13,10 @@
         <div class="iline" th:text="${message}">未知错误</div>
     </div>
 </div>
-<div class="ifooter">
-    <div class="itext-center">
-        <button class="ibutton" id="btn1">确定</button>
-    </div>
-</div>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
         $("title").html("请求失败");
-        $("#btn1").click(function () {
-            window.location.href = "/index.htm";
-        });
     });
     /*]]>*/
 </script>

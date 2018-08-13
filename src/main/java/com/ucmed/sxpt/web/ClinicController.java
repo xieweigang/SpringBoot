@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ucmed.sxpt.dao.PaymentOrderMapper;
 import com.ucmed.sxpt.entity.PaymentOrder;
+import com.ucmed.sxpt.entity.dto.UserDto;
 import com.ucmed.sxpt.util.GlobalConstants;
 import com.ucmed.sxpt.util.HttpApi;
 import com.ucmed.sxpt.util.PaymentConfig;
@@ -30,20 +31,13 @@ public class ClinicController {
     @Autowired
     private PaymentOrderMapper paymentOrderMapper;
 
-    // 门诊缴费入口页面
-    @RequestMapping(method = RequestMethod.GET, value = "/index.htm")
-    public String index(HttpServletRequest request, HttpSession session, ModelMap map) {
-        map.put("kh", "010");
-        map.put("klx", "3");
-        return "clinic/index";
-    }
-
     // 门诊缴费列表
     @RequestMapping(method = RequestMethod.GET, value = "/clinicPayList.htm")
-    public String clinicPayList(HttpServletRequest request, HttpSession session, ModelMap map) {
+    public String clinicPayList(HttpSession session, ModelMap map) {
+        UserDto userDto = (UserDto) session.getAttribute("user");
         Map<String, String> hashMap = new HashMap<>();
-        hashMap.put("cardno", request.getParameter("kh")); // 卡号
-        hashMap.put("cardtype", request.getParameter("klx")); // 卡类型
+        hashMap.put("cardno", userDto.getKh()); // 卡号
+        hashMap.put("cardtype", userDto.getKlx()); // 卡类型
         String resString = HttpApi.api(HttpApi.clinicpaylist, hashMap);
         JSONObject res = JSONObject.parseObject(resString);
         // 接口调用失败，返回错误页面
@@ -51,9 +45,6 @@ public class ClinicController {
             map.put("message", "暂无相关信息！");
             return "public/failed";
         }
-        // 卡号卡类型缓存
-        session.setAttribute("kh", request.getParameter("kh"));
-        session.setAttribute("klx", request.getParameter("klx"));
         // 重新构建页面所需参数
         JSONArray clinics = res.getJSONArray("clinics");
         JSONArray hasPayList = new JSONArray();
@@ -79,11 +70,12 @@ public class ClinicController {
     // 门诊缴费详情
     @RequestMapping(method = RequestMethod.GET, value = "/clinicPayDetail.htm")
     public String clinicPayDetail(HttpServletRequest request, HttpSession session, ModelMap map) {
+        UserDto userDto = (UserDto) session.getAttribute("user");
         String clinicString = request.getParameter("clinic");
         JSONObject clinic = JSONObject.parseObject(clinicString);
         Map<String, String> hashMap = new HashMap<>();
-        hashMap.put("cardno", (String) session.getAttribute("kh")); // 卡号
-        hashMap.put("cardtype", (String) session.getAttribute("klx")); // 卡类型
+        hashMap.put("cardno", userDto.getKh()); // 卡号
+        hashMap.put("cardtype", userDto.getKlx()); // 卡类型
         hashMap.put("clinicchargeid", clinic.getString("clinicChargeId")); // 诊间支付单id
         String resString = HttpApi.api(HttpApi.clinicpaydetail, hashMap);
         JSONObject res = JSONObject.parseObject(resString);
@@ -108,9 +100,10 @@ public class ClinicController {
     // 门诊指引单
     @RequestMapping(method = RequestMethod.GET, value = "/clinicGuide.htm")
     public String clinicGuide(HttpServletRequest request, HttpSession session, ModelMap map) {
+        UserDto userDto = (UserDto) session.getAttribute("user");
         Map<String, String> hashMap = new HashMap<>();
-        hashMap.put("cardno", (String) session.getAttribute("kh")); // 卡号
-        hashMap.put("cardtype", (String) session.getAttribute("klx")); // 卡类型
+        hashMap.put("cardno", userDto.getKh()); // 卡号
+        hashMap.put("cardtype", userDto.getKlx()); // 卡类型
         hashMap.put("clinicchargeid", request.getParameter("chargeId")); // 诊间支付单id
         String resString = HttpApi.api(HttpApi.clinicguide, hashMap);
         JSONObject res = JSONObject.parseObject(resString);
@@ -137,15 +130,14 @@ public class ClinicController {
     // 门诊缴费预结算，记录订单，并让患者支付
     @RequestMapping(method = RequestMethod.GET, value = "/clinicPayBudget.htm")
     public String clinicPayBudget(HttpServletRequest request, HttpSession session, ModelMap map) {
+        UserDto userDto = (UserDto) session.getAttribute("user");
         String orderAmount = request.getParameter("orderAmount");
         String goodsId = request.getParameter("goodsId");
         String goodsName = request.getParameter("goodsName");
-        String kh = (String) session.getAttribute("kh");
-        String klx = (String) session.getAttribute("klx");
         Map<String, String> hashMap = new HashMap<>();
         hashMap.put("clinicchargeid", goodsId); // 诊间支付单id
-        hashMap.put("cardno", kh); // 卡号
-        hashMap.put("cardtype", klx); // 卡类型
+        hashMap.put("cardno", userDto.getKh()); // 卡号
+        hashMap.put("cardtype", userDto.getKlx()); // 卡类型
         String resString = HttpApi.api(HttpApi.clinicpaybudget, hashMap);
         JSONObject res = JSONObject.parseObject(resString);
         // 接口调用失败，返回错误页面
@@ -168,8 +160,8 @@ public class ClinicController {
             paymentOrder.setOrderTitle("诊间支付"); // 订单类型名称
             paymentOrder.setOrderAmount(GlobalConstants.DF0.format(fee1 * 100)); // 订单金额，单位：分
             paymentOrder.setOrderStatus("0"); // 订单状态，0未通知1通知成功2通知失败
-            paymentOrder.setCardNo(kh); // 卡号
-            paymentOrder.setCardType(klx); // 卡类型0 医保卡2 健康卡3 省内外地社保卡
+            paymentOrder.setCardNo(userDto.getKh()); // 卡号
+            paymentOrder.setCardType(userDto.getKlx()); // 卡类型0 医保卡2 健康卡3 省内外地社保卡
             paymentOrder.setGoodsId(goodsId); // 商品单号，格式：1,2,3
             paymentOrder.setGoodsName(goodsName); // 商品名称，格式：处方,处置,检验
             paymentOrder.setCreateTime(new Date());

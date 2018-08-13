@@ -3,6 +3,7 @@ package com.ucmed.sxpt.util;
 import com.alibaba.fastjson.JSONObject;
 import com.ucmed.sxpt.entity.PaymentOrder;
 import org.apache.log4j.Logger;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -29,13 +30,13 @@ public class PaymentConfig {
     public static final String WX_REFUND_URL = GlobalConstants.WEB_URL + "/payment/payRefund.htm"; // 微信退款地址
 
     // 生成签名
-    public static String getSign(Map<String, String> paramsMap) {
+    public static String getSign(Map<String, String> treeMap) {
         String toSignSrc = "";
         int i = 0;
-        for (Map.Entry<String, String> mapEntry : paramsMap.entrySet()) {
+        for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
             toSignSrc += mapEntry.getKey() + "=" + mapEntry.getValue();
             i++;
-            if (i < paramsMap.size()) {
+            if (i < treeMap.size()) {
                 toSignSrc += "&";
             }
         }
@@ -63,7 +64,13 @@ public class PaymentConfig {
         // 生成支付地址
         String payOrderUrl = PAY_URL + "?";
         for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
-            payOrderUrl += mapEntry.getKey() + "=" + mapEntry.getValue() + "&";
+            String value = mapEntry.getValue();
+            try {
+                value = URLEncoder.encode(value, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            payOrderUrl += mapEntry.getKey() + "=" + value + "&";
         }
         payOrderUrl += "sign=" + sign;
         return payOrderUrl;
@@ -87,7 +94,8 @@ public class PaymentConfig {
         // 生产退款报文
         JSONObject payRefundJson = new JSONObject();
         for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
-            payRefundJson.put(mapEntry.getKey(), mapEntry.getValue());
+            String value = mapEntry.getValue();
+            payRefundJson.put(mapEntry.getKey(), value);
         }
         payRefundJson.put("sign", sign);
         return payRefundJson;
@@ -95,24 +103,29 @@ public class PaymentConfig {
 
     // 支付成功校验
     public static boolean checkSign(HttpServletRequest request) {
-        Map<String, String> paramsMap = new TreeMap<>();
+        Map<String, String> treeMap = new TreeMap<>();
         String sign1 = "";
         //获取所有的请求参数
         Enumeration<String> paraNames = request.getParameterNames();
         for (Enumeration<String> e = paraNames; e.hasMoreElements(); ) {
             String thisName = e.nextElement().toString();
             String thisValue = request.getParameter(thisName);
+            try {
+                thisValue = new String(thisValue.getBytes("iso-8859-1"), "utf-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
             if (thisName.equals("sign")) {
                 sign1 = thisValue;
             } else {
-                paramsMap.put(thisName, thisValue);
+                treeMap.put(thisName, thisValue);
             }
         }
         LOG.info("Source Sign:" + sign1);
-        String sign2 = getSign(paramsMap);
+        String sign2 = getSign(treeMap);
         LOG.info("Caculate Sign:" + sign2);
         String message = "入参列表：";
-        for (Map.Entry<String, String> mapEntry : paramsMap.entrySet()) {
+        for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
             message += mapEntry.getKey() + "=" + mapEntry.getValue() + "  ";
         }
         LOG.info(message);

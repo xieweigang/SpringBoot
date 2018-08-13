@@ -2,6 +2,7 @@ package com.ucmed.sxpt.web;
 
 import com.ucmed.sxpt.dao.PaymentOrderMapper;
 import com.ucmed.sxpt.entity.PaymentOrder;
+import com.ucmed.sxpt.entity.dto.UserDto;
 import com.ucmed.sxpt.util.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -26,10 +28,8 @@ public class FPaymentController {
 
     // 支付订单入口页面
     @RequestMapping(method = RequestMethod.GET, value = "/testPay.htm")
-    public String testPay(HttpServletRequest request, ModelMap map) {
-        LOG.info("test");
-        String kh = "A23455432";
-        String klx = "0";
+    public String testPay(HttpServletRequest request, HttpSession session, ModelMap map) {
+        UserDto userDto = (UserDto) session.getAttribute("user");
         String goodsId = "1,2,3,4";
         if (!StringUtils.isEmpty(request.getParameter("goodsId"))) {
             goodsId = request.getParameter("goodsId");
@@ -45,8 +45,8 @@ public class FPaymentController {
             paymentOrder.setOrderTitle("测试缴费"); // 订单类型名称
             paymentOrder.setOrderAmount(GlobalConstants.DF0.format(amount * 100)); // 订单金额，单位：分
             paymentOrder.setOrderStatus("0"); // 订单状态，0未通知1通知成功2通知失败
-            paymentOrder.setCardNo(kh); // 卡号
-            paymentOrder.setCardType(klx); // 卡类型0 医保卡2 健康卡3 省内外地社保卡
+            paymentOrder.setCardNo(userDto.getKh()); // 卡号
+            paymentOrder.setCardType(userDto.getKlx()); // 卡类型0 医保卡2 健康卡3 省内外地社保卡
             paymentOrder.setGoodsId(goodsId); // 商品单号，格式：1,2,3
             paymentOrder.setGoodsName(goodsName); // 商品名称，格式：处方,处置,检验
             paymentOrder.setTradeType("2"); // 交易类型，1支付宝2微信3银行
@@ -71,6 +71,11 @@ public class FPaymentController {
         PaymentOrder paymentOrder = paymentOrderMapper.selectByPrimaryKey(orderId);
         if (paymentOrder == null) {
             map.put("message", "订单不存在");
+            return "public/failed";
+        }
+        // 订单已支付
+        if (paymentOrder.getSerialStatus().equals("TRADE_SUCCESS")) {
+            map.put("message", "订单已成功支付");
             return "public/failed";
         }
         // 订单更新时间变更
@@ -102,7 +107,7 @@ public class FPaymentController {
         if (paymentOrder == null) {
             return "payment/payFailed";
         }
-        // 订单类型，1诊间支付2住院缴费3就诊卡充值
+        // 订单类型，1诊间支付2住院缴费3测试缴费
         String orderStatus = "0";
         if (paymentOrder.getOrderType().equals("1")) {
             orderStatus = ClinicController.clinicPayConfirm(paymentOrder); // 交易状态,0未通知1通知成功2通知失败
@@ -115,7 +120,7 @@ public class FPaymentController {
         paymentOrder.setUpdateTime(new Date());
         paymentOrderMapper.updateByPrimaryKey(paymentOrder);
         if (orderStatus.equals("1")) {
-            return "payment/Success";
+            return "payment/paySuccess";
         } else if (orderStatus.equals("2")) {
             return "payment/payFailed";
         }
@@ -124,10 +129,11 @@ public class FPaymentController {
 
     // 支付订单列表页面
     @RequestMapping(method = RequestMethod.GET, value = "/payList.htm")
-    public String payList(HttpServletRequest request, ModelMap map) {
+    public String payList(HttpSession session, ModelMap map) {
+        UserDto userDto = (UserDto) session.getAttribute("user");
         Map<String, Object> hashMap = new HashMap<>();
-        hashMap.put("cardNo", request.getParameter("kh")); // 卡号
-        hashMap.put("cardTpye", request.getParameter("klx")); // 卡类型
+        hashMap.put("cardNo", userDto.getKh()); // 卡号
+        hashMap.put("cardType", userDto.getKlx()); // 卡类型
         List<PaymentOrder> paymentOrderList = paymentOrderMapper.selectByCard(hashMap);
         map.put("payList", paymentOrderList);
         return "payment/payList";
@@ -141,11 +147,11 @@ public class FPaymentController {
             return null;
         }
         String orderId = request.getParameter("merOrderId");
-        String acceptUrl = request.getRequestURI();
+        String acceptUrl = request.getRequestURI(); // 获取请求地址
         String notifyId = request.getParameter("notifyId");
         String serialId = request.getParameter("seqId");
         String serialStatus = request.getParameter("status");
-        String serialPacket = request.getQueryString(); // 获取参数，只支持GET请求
+        String serialPacket = request.getQueryString(); // 获取请求参数，只支持GET请求
         LOG.info("请求地址：" + acceptUrl);
         LOG.info("请求报文：" + serialPacket);
         PaymentOrder paymentOrder = paymentOrderMapper.selectByPrimaryKey(orderId);

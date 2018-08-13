@@ -10,7 +10,7 @@
         <div class="iblock-text">支付成功</div>
     </div>
     <div class="iblock">
-        <div class="iline" id="showConfirm">
+        <div class="iline" id="showPaylist">
             <div class="ifloat-left iwidth70">缴费已完成</div>
             <div class="ifloat-left iwidth20 itext-link itext-right">支付记录</div>
             <div class="ifloat-right iwidth10 itext-right">
@@ -23,7 +23,8 @@
     /*<![CDATA[*/
     $(function () {
         $("title").html("支付成功");
-        $("#btn1").click(function () {
+        // 点击获取详情
+        $("#showPaylist").click(function () {
             window.location.href = "../payment/payList.htm";
         });
     });

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout::head"></head>
+<body class="body">
+<div class="icontainer">
+    <div class="icontent">
+        <div class="iblock4 imargin-buttom-10">
+            <div class="iline">请输入您要缴费的卡号和卡类型</div>
+        </div>
+        <div class="iblock ipandding-10">
+            <div class="iline">
+                <label class="ifloat-left iwidth30 ifont-16">卡号</label>
+                <input class="ifloat-left iwidth70 iinput" type="text" id="kh" name="kh" placeholder="请输入您的卡号"/>
+            </div>
+            <div class="iline">
+                <label class="ifloat-left iwidth30 ifont-16">卡类型</label>
+                <div class="ifloat-left iwidth70 ifont-16" id="klx">医保卡</div>
+            </div>
+        </div>
+    </div>
+    <div class="ifooter">
+        <div class="itext-center">
+            <button class="ibutton" id="btn1">确定</button>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        var kh = [[${kh}]];
+        var klx = [[${klx}]];
+        // 页面标题
+        $("title").html("选择就诊人");
+        // 卡号和卡类型输入
+        $("#kh").val(kh);
+        var cardType = ['0', '2', '3'];
+        var cardValue = ['医保卡', '健康卡', '省内外地社保卡'];
+        for (var i = 0; i < cardType.length; i++) {
+            if (cardType[i] == klx) {
+                break;
+            }
+        }
+        $("#klx").attr('data-attribute', cardType[i]);
+        $("#klx").html(cardValue[i]);
+        // 下拉选择
+        var mobileSelect1 = new MobileSelect({
+            trigger: '#klx',
+            title: '卡类型',
+            wheels: [
+                {data: cardValue}
+            ],
+            position: [i], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            transitionEnd: function (indexArr, data) {
+                console.log(data);
+            },
+            callback: function (indexArr, data) {
+                console.log(data);
+                for (var i = 0; i < cardValue.length; i++) {
+                    if (cardValue[i] == data[0]) {
+                        $("#klx").attr('data-attribute', cardType[i]);
+                        break;
+                    }
+                }
+            }
+        });
+        // 确定查询
+        $("#btn1").click(function () {
+            var kh = $("#kh").val();
+            var klx = $("#klx").attr('data-attribute');
+            window.location.href = "../public/loginDo.htm?kh=" + kh + "&klx=" + klx;
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
