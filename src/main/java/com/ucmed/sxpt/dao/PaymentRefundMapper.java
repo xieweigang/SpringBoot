@@ -103,4 +103,24 @@ public interface PaymentRefundMapper {
         "where refund_id = #{refundId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(PaymentRefund record);
+
+    // 根据退款唯一号查询退款
+    @Select({
+            "select * from t_payment_refund where unique_id = #{uniqueId}"
+    })
+    @Results({
+            @Result(column="refund_id", property="refundId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="order_id", property="orderId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="unique_id", property="uniqueId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_type", property="refundType", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_status", property="refundStatus", jdbcType=JdbcType.VARCHAR),
+            @Result(column="trade_type", property="tradeType", jdbcType=JdbcType.VARCHAR),
+            @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
+            @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    PaymentRefund selectByUniqueId(String uniqueId);
 }
