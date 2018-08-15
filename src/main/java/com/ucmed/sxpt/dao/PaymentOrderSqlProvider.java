@@ -73,10 +73,6 @@ public class PaymentOrderSqlProvider {
             sql.VALUES("serial_packet", "#{serialPacket,jdbcType=VARCHAR}");
         }
         
-        if (record.getRefundId() != null) {
-            sql.VALUES("refund_id", "#{refundId,jdbcType=VARCHAR}");
-        }
-        
         if (record.getRefundAmount() != null) {
             sql.VALUES("refund_amount", "#{refundAmount,jdbcType=VARCHAR}");
         }
@@ -154,10 +150,6 @@ public class PaymentOrderSqlProvider {
         
         if (record.getSerialPacket() != null) {
             sql.SET("serial_packet = #{serialPacket,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getRefundId() != null) {
-            sql.SET("refund_id = #{refundId,jdbcType=VARCHAR}");
         }
         
         if (record.getRefundAmount() != null) {

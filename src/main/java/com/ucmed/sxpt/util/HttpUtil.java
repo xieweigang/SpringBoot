@@ -1,5 +1,6 @@
 package com.ucmed.sxpt.util;
 
+import com.ucmed.sxpt.web.FPaymentController;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -177,7 +178,8 @@ public class HttpUtil {
      * 工具类测试
      */
     public static void main(String[] args) {
-        String resString = HttpUtil.getInstance().GET("http://192.168.0.30:32505/Student/select?id=1");
+        String url = "http://localhost:8080/api/getPayOrder?kh=010&klx=2";
+        String resString = HttpUtil.getInstance().GET(url);
         LOG.info(resString);
     }
 }

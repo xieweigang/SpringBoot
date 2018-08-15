@@ -9,7 +9,7 @@ public class PaymentOrder {
     private String orderId;
 
     /**
-     * 订单类型，1诊间支付2住院缴费3测试缴费
+     * 订单类型，0测试缴费1诊间支付2住院缴费3挂号费4卡充值5其他
      */
     private String orderType;
 
@@ -24,7 +24,7 @@ public class PaymentOrder {
     private String orderAmount;
 
     /**
-     * 订单状态，0未通知1通知成功2通知失败
+     * 订单状态，0未支付1已支付2支付已通知3已退款4订单已失效
      */
     private String orderStatus;
 
@@ -79,11 +79,6 @@ public class PaymentOrder {
     private String serialPacket;
 
     /**
-     * 退款订单号，格式：1,2,3
-     */
-    private String refundId;
-
-    /**
      * 退款金额，单位：分
      */
     private String refundAmount;
@@ -115,16 +110,16 @@ public class PaymentOrder {
     }
 
     /**
-     * 订单类型，1诊间支付2住院缴费3测试缴费
-     * @return order_type 订单类型，1诊间支付2住院缴费3测试缴费
+     * 订单类型，0测试缴费1诊间支付2住院缴费3挂号费4卡充值5其他
+     * @return order_type 订单类型，0测试缴费1诊间支付2住院缴费3挂号费4卡充值5其他
      */
     public String getOrderType() {
         return orderType;
     }
 
     /**
-     * 订单类型，1诊间支付2住院缴费3测试缴费
-     * @param orderType 订单类型，1诊间支付2住院缴费3测试缴费
+     * 订单类型，0测试缴费1诊间支付2住院缴费3挂号费4卡充值5其他
+     * @param orderType 订单类型，0测试缴费1诊间支付2住院缴费3挂号费4卡充值5其他
      */
     public void setOrderType(String orderType) {
         this.orderType = orderType == null ? null : orderType.trim();
@@ -163,16 +158,16 @@ public class PaymentOrder {
     }
 
     /**
-     * 订单状态，0未通知1通知成功2通知失败
-     * @return order_status 订单状态，0未通知1通知成功2通知失败
+     * 订单状态，0未支付1已支付2支付已通知3已退款4订单已失效
+     * @return order_status 订单状态，0未支付1已支付2支付已通知3已退款4订单已失效
      */
     public String getOrderStatus() {
         return orderStatus;
     }
 
     /**
-     * 订单状态，0未通知1通知成功2通知失败
-     * @param orderStatus 订单状态，0未通知1通知成功2通知失败
+     * 订单状态，0未支付1已支付2支付已通知3已退款4订单已失效
+     * @param orderStatus 订单状态，0未支付1已支付2支付已通知3已退款4订单已失效
      */
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus == null ? null : orderStatus.trim();
@@ -336,22 +331,6 @@ public class PaymentOrder {
      */
     public void setSerialPacket(String serialPacket) {
         this.serialPacket = serialPacket == null ? null : serialPacket.trim();
-    }
-
-    /**
-     * 退款订单号，格式：1,2,3
-     * @return refund_id 退款订单号，格式：1,2,3
-     */
-    public String getRefundId() {
-        return refundId;
-    }
-
-    /**
-     * 退款订单号，格式：1,2,3
-     * @param refundId 退款订单号，格式：1,2,3
-     */
-    public void setRefundId(String refundId) {
-        this.refundId = refundId == null ? null : refundId.trim();
     }
 
     /**

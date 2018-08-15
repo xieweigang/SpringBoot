@@ -28,17 +28,17 @@ public interface PaymentRefundMapper {
      */
     @Insert({
         "insert into t_payment_refund (refund_id, order_id, ",
-        "refund_type, refund_amount, ",
-        "refund_status, trade_type, ",
-        "serial_id, serial_status, ",
-        "serial_packet, create_time, ",
-        "update_time)",
+        "unique_id, refund_type, ",
+        "refund_amount, refund_status, ",
+        "trade_type, serial_id, ",
+        "serial_status, serial_packet, ",
+        "create_time, update_time)",
         "values (#{refundId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, ",
-        "#{refundType,jdbcType=VARCHAR}, #{refundAmount,jdbcType=VARCHAR}, ",
-        "#{refundStatus,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, ",
-        "#{serialId,jdbcType=VARCHAR}, #{serialStatus,jdbcType=VARCHAR}, ",
-        "#{serialPacket,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, ",
-        "#{updateTime,jdbcType=TIMESTAMP})"
+        "#{uniqueId,jdbcType=VARCHAR}, #{refundType,jdbcType=VARCHAR}, ",
+        "#{refundAmount,jdbcType=VARCHAR}, #{refundStatus,jdbcType=VARCHAR}, ",
+        "#{tradeType,jdbcType=VARCHAR}, #{serialId,jdbcType=VARCHAR}, ",
+        "#{serialStatus,jdbcType=VARCHAR}, #{serialPacket,jdbcType=VARCHAR}, ",
+        "#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})"
     })
     int insert(PaymentRefund record);
 
@@ -55,7 +55,7 @@ public interface PaymentRefundMapper {
      */
     @Select({
         "select",
-        "refund_id, order_id, refund_type, refund_amount, refund_status, trade_type, ",
+        "refund_id, order_id, unique_id, refund_type, refund_amount, refund_status, trade_type, ",
         "serial_id, serial_status, serial_packet, create_time, update_time",
         "from t_payment_refund",
         "where refund_id = #{refundId,jdbcType=VARCHAR}"
@@ -63,6 +63,7 @@ public interface PaymentRefundMapper {
     @Results({
         @Result(column="refund_id", property="refundId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="order_id", property="orderId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="unique_id", property="uniqueId", jdbcType=JdbcType.VARCHAR),
         @Result(column="refund_type", property="refundType", jdbcType=JdbcType.VARCHAR),
         @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
         @Result(column="refund_status", property="refundStatus", jdbcType=JdbcType.VARCHAR),
@@ -89,6 +90,7 @@ public interface PaymentRefundMapper {
     @Update({
         "update t_payment_refund",
         "set order_id = #{orderId,jdbcType=VARCHAR},",
+          "unique_id = #{uniqueId,jdbcType=VARCHAR},",
           "refund_type = #{refundType,jdbcType=VARCHAR},",
           "refund_amount = #{refundAmount,jdbcType=VARCHAR},",
           "refund_status = #{refundStatus,jdbcType=VARCHAR},",

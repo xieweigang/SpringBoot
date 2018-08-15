@@ -21,6 +21,10 @@ public class PaymentRefundSqlProvider {
             sql.VALUES("order_id", "#{orderId,jdbcType=VARCHAR}");
         }
         
+        if (record.getUniqueId() != null) {
+            sql.VALUES("unique_id", "#{uniqueId,jdbcType=VARCHAR}");
+        }
+        
         if (record.getRefundType() != null) {
             sql.VALUES("refund_type", "#{refundType,jdbcType=VARCHAR}");
         }
@@ -70,6 +74,10 @@ public class PaymentRefundSqlProvider {
         
         if (record.getOrderId() != null) {
             sql.SET("order_id = #{orderId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUniqueId() != null) {
+            sql.SET("unique_id = #{uniqueId,jdbcType=VARCHAR}");
         }
         
         if (record.getRefundType() != null) {

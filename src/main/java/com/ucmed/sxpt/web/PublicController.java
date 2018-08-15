@@ -19,24 +19,16 @@ public class PublicController {
     public static final Logger LOG = Logger.getLogger(PublicController.class);
 
     // 登录页面
-    @RequestMapping(value = "/test.htm")
-    public String test(HttpServletRequest request, ModelMap map) {
-        Map<String, String> treeMap = new TreeMap<>();
-        Enumeration<String> paraNames = request.getParameterNames();
-        for (Enumeration<String> e = paraNames; e.hasMoreElements(); ) {
-            String thisName = e.nextElement().toString();
-            String thisValue = request.getParameter(thisName);
-            treeMap.put(thisName, thisValue);
-        }
-        LOG.info(treeMap);
-        return "public/login";
-    }
-
-    // 登录页面
     @RequestMapping(method = RequestMethod.GET, value = "/login.htm")
     public String login(HttpServletRequest request, ModelMap map) {
-        map.put("kh", "010");
-        map.put("klx", "3");
+        String kh = request.getParameter("kh");
+        String klx = request.getParameter("klx");
+        if (kh == null || klx == null) {
+            kh = "010";
+            klx = "2";
+        }
+        map.put("kh", kh);
+        map.put("klx", klx);
         return "public/login";
     }
 

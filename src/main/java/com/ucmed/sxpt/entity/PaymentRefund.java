@@ -14,7 +14,12 @@ public class PaymentRefund {
     private String orderId;
 
     /**
-     * 退款类型，1异常退款2院方退款
+     * 唯一号
+     */
+    private String uniqueId;
+
+    /**
+     * 退款类型，1自动退款2院方退款3异常退款
      */
     private String refundType;
 
@@ -24,7 +29,7 @@ public class PaymentRefund {
     private String refundAmount;
 
     /**
-     * 退款状态，0未通知1通知成功2通知失败
+     * 退款状态，0未退款1已退款
      */
     private String refundStatus;
 
@@ -91,16 +96,32 @@ public class PaymentRefund {
     }
 
     /**
-     * 退款类型，1异常退款2院方退款
-     * @return refund_type 退款类型，1异常退款2院方退款
+     * 唯一号
+     * @return unique_id 唯一号
+     */
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    /**
+     * 唯一号
+     * @param uniqueId 唯一号
+     */
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId == null ? null : uniqueId.trim();
+    }
+
+    /**
+     * 退款类型，1自动退款2院方退款3异常退款
+     * @return refund_type 退款类型，1自动退款2院方退款3异常退款
      */
     public String getRefundType() {
         return refundType;
     }
 
     /**
-     * 退款类型，1异常退款2院方退款
-     * @param refundType 退款类型，1异常退款2院方退款
+     * 退款类型，1自动退款2院方退款3异常退款
+     * @param refundType 退款类型，1自动退款2院方退款3异常退款
      */
     public void setRefundType(String refundType) {
         this.refundType = refundType == null ? null : refundType.trim();
@@ -123,16 +144,16 @@ public class PaymentRefund {
     }
 
     /**
-     * 退款状态，0未通知1通知成功2通知失败
-     * @return refund_status 退款状态，0未通知1通知成功2通知失败
+     * 退款状态，0未退款1已退款
+     * @return refund_status 退款状态，0未退款1已退款
      */
     public String getRefundStatus() {
         return refundStatus;
     }
 
     /**
-     * 退款状态，0未通知1通知成功2通知失败
-     * @param refundStatus 退款状态，0未通知1通知成功2通知失败
+     * 退款状态，0未退款1已退款
+     * @param refundStatus 退款状态，0未退款1已退款
      */
     public void setRefundStatus(String refundStatus) {
         this.refundStatus = refundStatus == null ? null : refundStatus.trim();

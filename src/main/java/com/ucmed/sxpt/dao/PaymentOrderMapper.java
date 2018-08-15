@@ -37,9 +37,8 @@ public interface PaymentOrderMapper {
         "goods_name, trade_type, ",
         "accept_url, notify_id, ",
         "serial_id, serial_status, ",
-        "serial_packet, refund_id, ",
-        "refund_amount, create_time, ",
-        "update_time)",
+        "serial_packet, refund_amount, ",
+        "create_time, update_time)",
         "values (#{orderId,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, ",
         "#{orderTitle,jdbcType=VARCHAR}, #{orderAmount,jdbcType=VARCHAR}, ",
         "#{orderStatus,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, ",
@@ -47,9 +46,8 @@ public interface PaymentOrderMapper {
         "#{goodsName,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, ",
         "#{acceptUrl,jdbcType=VARCHAR}, #{notifyId,jdbcType=VARCHAR}, ",
         "#{serialId,jdbcType=VARCHAR}, #{serialStatus,jdbcType=VARCHAR}, ",
-        "#{serialPacket,jdbcType=VARCHAR}, #{refundId,jdbcType=VARCHAR}, ",
-        "#{refundAmount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, ",
-        "#{updateTime,jdbcType=TIMESTAMP})"
+        "#{serialPacket,jdbcType=VARCHAR}, #{refundAmount,jdbcType=VARCHAR}, ",
+        "#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})"
     })
     int insert(PaymentOrder record);
 
@@ -68,7 +66,7 @@ public interface PaymentOrderMapper {
         "select",
         "order_id, order_type, order_title, order_amount, order_status, card_no, card_type, ",
         "goods_id, goods_name, trade_type, accept_url, notify_id, serial_id, serial_status, ",
-        "serial_packet, refund_id, refund_amount, create_time, update_time",
+        "serial_packet, refund_amount, create_time, update_time",
         "from t_payment_order",
         "where order_id = #{orderId,jdbcType=VARCHAR}"
     })
@@ -88,7 +86,6 @@ public interface PaymentOrderMapper {
         @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
         @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
         @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
-        @Result(column="refund_id", property="refundId", jdbcType=JdbcType.VARCHAR),
         @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
@@ -122,7 +119,6 @@ public interface PaymentOrderMapper {
           "serial_id = #{serialId,jdbcType=VARCHAR},",
           "serial_status = #{serialStatus,jdbcType=VARCHAR},",
           "serial_packet = #{serialPacket,jdbcType=VARCHAR},",
-          "refund_id = #{refundId,jdbcType=VARCHAR},",
           "refund_amount = #{refundAmount,jdbcType=VARCHAR},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP}",
@@ -150,7 +146,6 @@ public interface PaymentOrderMapper {
             @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
-            @Result(column="refund_id", property="refundId", jdbcType=JdbcType.VARCHAR),
             @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
@@ -177,7 +172,6 @@ public interface PaymentOrderMapper {
             @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
-            @Result(column="refund_id", property="refundId", jdbcType=JdbcType.VARCHAR),
             @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)

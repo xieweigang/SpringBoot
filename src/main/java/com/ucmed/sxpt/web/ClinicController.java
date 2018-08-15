@@ -8,7 +8,6 @@ import com.ucmed.sxpt.entity.dto.UserDto;
 import com.ucmed.sxpt.util.GlobalConstants;
 import com.ucmed.sxpt.util.HttpApi;
 import com.ucmed.sxpt.util.PaymentConfig;
-import com.ucmed.sxpt.util.WebResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +19,7 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class ClinicController {
         // 接口调用失败，返回错误页面
         if (!res.getString("returnCode").equals("0")) {
             map.put("message", "暂无相关信息！");
-            return "public/failed";
+            return "public/error";
         }
         // 重新构建页面所需参数
         JSONArray clinics = res.getJSONArray("clinics");
@@ -82,7 +82,7 @@ public class ClinicController {
         // 接口调用失败，返回错误页面
         if (!res.getString("returnCode").equals("0")) {
             map.put("message", "暂无相关信息！");
-            return "public/failed";
+            return "public/error";
         }
         if (clinic.getString("isPay").equals("P")) {
             clinic.put("isPayName", "已支付");
@@ -110,7 +110,7 @@ public class ClinicController {
         // 接口调用失败，返回错误页面
         if (!res.getString("returnCode").equals("0")) {
             map.put("message", "暂无相关信息！");
-            return "public/failed";
+            return "public/error";
         }
         map.put("guide", res);
         return "clinic/clinicGuide";
@@ -124,7 +124,11 @@ public class ClinicController {
         hashMap.put("clinicchargeid", request.getParameter("chargeId")); // 诊间支付单id（支持多单号，以逗号分隔，比如：123,125,126）
         hashMap.put("confirmnumber", request.getParameter("doctorId")); // 确认人工号（药师工号）
         String resString = HttpApi.api(HttpApi.clinicpayconfirm, hashMap);
-        WebResponse.JsonResponse(response, resString);
+        try {
+            response.getWriter().print(resString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // 门诊缴费预结算，记录订单，并让患者支付
@@ -143,41 +147,39 @@ public class ClinicController {
         // 接口调用失败，返回错误页面
         if (!res.getString("returnCode").equals("0")) {
             map.put("message", "预结算失败");
-            return "public/failed";
+            return "public/error";
         }
         double fee1 = GlobalConstants.DoubleValueOf(res.getString("fee"));
         double fee2 = GlobalConstants.DoubleValueOf(orderAmount);
         if (fee1 != fee2) {
             map.put("message", "结算金额有出入");
-            return "public/failed";
+            return "public/error";
         }
         // 本地订单记录
         PaymentOrder paymentOrder = paymentOrderMapper.selectByGoodsId(goodsId);
         if (paymentOrder == null) {
             paymentOrder = new PaymentOrder();
             paymentOrder.setOrderId(PaymentConfig.getOrderId()); // 订单号
-            paymentOrder.setOrderType("1"); // 订单类型，1诊间支付2住院缴费3测试缴费
-            paymentOrder.setOrderTitle("诊间支付"); // 订单类型名称
-            paymentOrder.setOrderAmount(GlobalConstants.DF0.format(fee1 * 100)); // 订单金额，单位：分
-            paymentOrder.setOrderStatus("0"); // 订单状态，0未通知1通知成功2通知失败
-            paymentOrder.setCardNo(userDto.getKh()); // 卡号
-            paymentOrder.setCardType(userDto.getKlx()); // 卡类型0 医保卡2 健康卡3 省内外地社保卡
-            paymentOrder.setGoodsId(goodsId); // 商品单号，格式：1,2,3
-            paymentOrder.setGoodsName(goodsName); // 商品名称，格式：处方,处置,检验
+            paymentOrder.setOrderType("1");
+            paymentOrder.setOrderTitle("诊间支付");
+            paymentOrder.setOrderAmount(GlobalConstants.DF0.format(fee1 * 100));
+            paymentOrder.setOrderStatus("0");
+            paymentOrder.setCardNo(userDto.getKh());
+            paymentOrder.setCardType(userDto.getKlx());
+            paymentOrder.setGoodsId(goodsId);
+            paymentOrder.setGoodsName(goodsName);
             paymentOrder.setCreateTime(new Date());
             paymentOrder.setUpdateTime(new Date());
             paymentOrderMapper.insert(paymentOrder);
         }
-        double amount = GlobalConstants.DoubleValueOf(paymentOrder.getOrderAmount());
-        String viewAmount = GlobalConstants.DF0_00.format(amount / 100);
         map.put("orderId", paymentOrder.getOrderId());
-        map.put("orderAmount", viewAmount);
+        map.put("orderAmount", res.getString("fee"));
         map.put("goodsName", paymentOrder.getGoodsName());
         return "payment/payView";
     }
 
     // 门诊支付结算
-    public static String clinicPayConfirm(PaymentOrder paymentOrder) {
+    public static boolean clinicPayConfirm(PaymentOrder paymentOrder) {
         // 门诊支付结算
         Map<String, String> hashMap = new HashMap<>();
         hashMap.put("tradetype", paymentOrder.getTradeType()); // 交易类型1：支付宝2：微信3：银行
@@ -190,11 +192,9 @@ public class ClinicController {
         hashMap.put("packet", paymentOrder.getSerialPacket()); // 支付通知报文
         String resString = HttpApi.api(HttpApi.clinicpay, hashMap);
         JSONObject res = JSONObject.parseObject(resString);
-        // 交易状态,0未通知1通知成功2通知失败
         if (res.getString("returnCode").equals("0")) {
-            return "1";
-        } else {
-            return "2";
+            return true;
         }
+        return false;
     }
 }

@@ -2,9 +2,7 @@ package com.ucmed.sxpt.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ucmed.sxpt.entity.PaymentOrder;
 import org.apache.log4j.Logger;
-import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -25,26 +23,30 @@ public class PaymentConfig {
     //public static final String PAY_URL = "https://qr.chinaums.com/netpay-portal/webpay/pay.do"; //  支付下单生产环境接口地址
     public static final String PAY_REFUND_URL = "https://qr-test2.chinaums.com/netpay-route-server/api/"; // 退款测试环境接口地址
     //public static final String PAY_REFUND_URL = "https://qr.chinaums.com/netpay-route-server/api/"; // 退款生产环境接口地址
-    public static final String WX_REFUND_URL = GlobalConstants.WEB_URL + "/payment/payRefund.htm"; // 微信退款地址
 
     // 生成签名
     public static String getSign(Map<String, String> treeMap) {
         String toSignSrc = "";
         int i = 0;
         for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
-            toSignSrc += mapEntry.getKey() + "=" + mapEntry.getValue();
             i++;
+            if (mapEntry.getKey().equals("sign")) {
+                continue;
+            }
+            toSignSrc += mapEntry.getKey() + "=" + mapEntry.getValue();
             if (i < treeMap.size()) {
                 toSignSrc += "&";
             }
         }
         // MD5的方式签名
         String sign = MD5Encrypt.MD5(toSignSrc + KEY);
+        LOG.info("签名报文：" + treeMap);
+        LOG.info("签名结果：" + sign);
         return sign;
     }
 
     // 生成支付报文
-    public static String gePayOrderUrl(String merOrderId, String totalAmount, String notifyUrl, String returnUrl) {
+    public static Map<String, String> getPayOrderPocket(String merOrderId, String totalAmount, String notifyUrl, String returnUrl) {
         // 请求入参处理
         Map<String, String> treeMap = new TreeMap<>();
         treeMap.put("merOrderId", merOrderId); // 商户订单号
@@ -58,7 +60,14 @@ public class PaymentConfig {
         treeMap.put("requestTimestamp", DateUtil.dateToString4(new Date())); // 时间
         treeMap.put("notifyUrl", notifyUrl); // 支付结果通知地址
         treeMap.put("returnUrl", returnUrl); // 网页跳转地址
-        String sign = PaymentConfig.getSign(treeMap);
+        LOG.info("生成支付报文：" + treeMap);
+        return treeMap;
+    }
+
+    // 生成支付地址
+    public static String getPayOrderUrl(Map<String, String> treeMap) {
+        // 生成支付地址
+        String sign = getSign(treeMap);
         // 生成支付地址
         String payOrderUrl = PAY_URL + "?";
         for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
@@ -71,11 +80,12 @@ public class PaymentConfig {
             payOrderUrl += mapEntry.getKey() + "=" + value + "&";
         }
         payOrderUrl += "sign=" + sign;
+        LOG.info("生成支付请求：" + payOrderUrl);
         return payOrderUrl;
     }
 
     // 生成退款报文
-    public static JSONObject getPayRefundJson(String merOrderId, String refundOrderId, String refundAmount) {
+    public static Map<String, String> getPayRefundPocket(String merOrderId, String refundOrderId, String refundAmount) {
         // 请求入参处理
         Map<String, String> treeMap = new TreeMap<>();
         treeMap.put("tid", TID); // 终端号
@@ -88,18 +98,24 @@ public class PaymentConfig {
         treeMap.put("refundOrderId", refundOrderId); // 退款订单号
         treeMap.put("refundAmount", refundAmount); /// 总金额（分）
         treeMap.put("requestTimestamp", DateUtil.dateToString4(new Date())); // 时间
-        String sign = PaymentConfig.getSign(treeMap);
+        LOG.info("生成退款报文：" + treeMap);
+        return treeMap;
+    }
+
+    // 生成退款地址
+    public static JSONObject getPayRefundJson(Map<String, String> treeMap) {
+        String sign = getSign(treeMap);
         // 生产退款报文
         JSONObject payRefundJson = new JSONObject();
         for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
-            String value = mapEntry.getValue();
-            payRefundJson.put(mapEntry.getKey(), value);
+            payRefundJson.put(mapEntry.getKey(), mapEntry.getValue());
         }
         payRefundJson.put("sign", sign);
+        LOG.info("生成退款请求:" + payRefundJson);
         return payRefundJson;
     }
 
-    // 获取支付或退款响应报文
+    // 获取支付退款结果报文
     public static Map<String, String> getPocket(HttpServletRequest request, JSONObject res) {
         Map<String, String> treeMap = new TreeMap<>();
         if (request != null) {
@@ -122,95 +138,34 @@ public class PaymentConfig {
                 treeMap.put(thisName, thisValue);
             }
         }
-        LOG.info("响应报文：" + treeMap);
+        LOG.info("支付退款结果报文：" + treeMap);
         return treeMap;
     }
 
-    // 支付通知报文校验
-    public static boolean checkSign(HttpServletRequest request) {
-        Map<String, String> treeMap = new TreeMap<>();
-        String sign1 = "";
-        //获取所有的请求参数
-        Enumeration<String> paraNames = request.getParameterNames();
-        for (Enumeration<String> e = paraNames; e.hasMoreElements(); ) {
-            String thisName = e.nextElement().toString();
-            String thisValue = request.getParameter(thisName);
-            try {
-                thisValue = new String(thisValue.getBytes("iso-8859-1"), "utf-8");
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            }
-            if (thisName.equals("sign")) {
-                sign1 = thisValue;
-            } else {
-                treeMap.put(thisName, thisValue);
-            }
-        }
-        LOG.info("Source Sign:" + sign1);
-        String sign2 = getSign(treeMap);
-        LOG.info("Caculate Sign:" + sign2);
-        String message = "入参列表：";
-        for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
-            message += mapEntry.getKey() + "=" + mapEntry.getValue() + "  ";
-        }
-        LOG.info(message);
+    // 支付退款结果报文校验
+    public static boolean checkPocket(Map<String, String> treeMap) {
+        String sign1 = getSign(treeMap);
+        LOG.info("计算签名：" + sign1);
+        String sign2 = treeMap.get("sign");
+        LOG.info("原始签名：" + treeMap.get("sign"));
         if (!sign1.toUpperCase().equals(sign2.toUpperCase())) {
             LOG.error("验证签名失败!");
             return false;
         }
         return true;
-    }
-
-    // 退款通知报文校验
-    public static boolean checkSign(JSONObject res) {
-        Map<String, String> treeMap = new TreeMap<>();
-        String sign1 = "";
-        Map<String, String> map = (Map) JSON.parse(String.valueOf(res));
-        for (Map.Entry<String, String> mapEntry : map.entrySet()) {
-            String thisName = mapEntry.getKey();
-            String thisValue = String.valueOf(mapEntry.getValue());
-            if (thisName.equals("sign")) {
-                sign1 = thisValue;
-            } else {
-                treeMap.put(thisName, thisValue);
-            }
-        }
-        LOG.info("Source Sign:" + sign1);
-        String sign2 = getSign(treeMap);
-        LOG.info("Caculate Sign:" + sign2);
-        String message = "入参列表：";
-        for (Map.Entry<String, String> mapEntry : treeMap.entrySet()) {
-            message += mapEntry.getKey() + "=" + mapEntry.getValue() + "  ";
-        }
-        LOG.info(message);
-        if (!sign1.toUpperCase().equals(sign2.toUpperCase())) {
-            LOG.error("验证签名失败!");
-            return false;
-        }
-        return true;
-    }
-
-    // 支付方式转换
-    public static String getMsgType(String orderType) {
-        // WXPay.jsPay:微信公众号支付trade.jsPay:支付宝qmf.jspay:全民付qmf.webPay:无卡
-        String msgType = "qmf.jspay";
-        if (orderType.equals("1")) {
-            msgType = "trade.jsPay";
-        } else if (orderType.equals("2")) {
-            msgType = "WXPay.jsPay";
-        } else if (orderType.equals("3")) {
-            msgType = "qmf.webPay";
-        }
-        return msgType;
     }
 
     // 支付订单号生成
     public static String getOrderId() {
-        return PaymentConfig.MSG_ID + String.valueOf(new Date().getTime()) + "6011";
+        String orderId = MSG_ID + String.valueOf(new Date().getTime()) + "6011";
+        LOG.info("生成支付订单：" + orderId);
+        return orderId;
     }
 
     // 退款订单号生成
     public static String getRefundId() {
-        return PaymentConfig.MSG_ID + String.valueOf(new Date().getTime()) + "6012";
+        String refundId = MSG_ID + String.valueOf(new Date().getTime()) + "6012";
+        LOG.info("生成退款订单" + refundId);
+        return refundId;
     }
 }
