@@ -17,28 +17,28 @@ import java.util.Map;
 public interface PaymentOrderMapper {
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Delete({
-        "delete from payment_order",
+        "delete from t_payment_order",
         "where order_id = #{orderId,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(String orderId);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Insert({
-        "insert into payment_order (order_id, order_type, ",
+        "insert into t_payment_order (order_id, order_type, ",
         "order_title, order_amount, ",
         "order_status, card_no, ",
         "card_type, goods_id, ",
         "goods_name, trade_type, ",
         "accept_url, notify_id, ",
         "serial_id, serial_status, ",
-        "serial_packet, create_time, ",
-        "update_time)",
+        "serial_packet, refund_amount, ",
+        "create_time, update_time)",
         "values (#{orderId,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, ",
         "#{orderTitle,jdbcType=VARCHAR}, #{orderAmount,jdbcType=VARCHAR}, ",
         "#{orderStatus,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, ",
@@ -46,28 +46,28 @@ public interface PaymentOrderMapper {
         "#{goodsName,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, ",
         "#{acceptUrl,jdbcType=VARCHAR}, #{notifyId,jdbcType=VARCHAR}, ",
         "#{serialId,jdbcType=VARCHAR}, #{serialStatus,jdbcType=VARCHAR}, ",
-        "#{serialPacket,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, ",
-        "#{updateTime,jdbcType=TIMESTAMP})"
+        "#{serialPacket,jdbcType=VARCHAR}, #{refundAmount,jdbcType=VARCHAR}, ",
+        "#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})"
     })
     int insert(PaymentOrder record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @InsertProvider(type=PaymentOrderSqlProvider.class, method="insertSelective")
     int insertSelective(PaymentOrder record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Select({
         "select",
         "order_id, order_type, order_title, order_amount, order_status, card_no, card_type, ",
         "goods_id, goods_name, trade_type, accept_url, notify_id, serial_id, serial_status, ",
-        "serial_packet, create_time, update_time",
-        "from payment_order",
+        "serial_packet, refund_amount, create_time, update_time",
+        "from t_payment_order",
         "where order_id = #{orderId,jdbcType=VARCHAR}"
     })
     @Results({
@@ -86,6 +86,7 @@ public interface PaymentOrderMapper {
         @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
         @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
         @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
+        @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
@@ -93,17 +94,17 @@ public interface PaymentOrderMapper {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @UpdateProvider(type=PaymentOrderSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(PaymentOrder record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Update({
-        "update payment_order",
+        "update t_payment_order",
         "set order_type = #{orderType,jdbcType=VARCHAR},",
           "order_title = #{orderTitle,jdbcType=VARCHAR},",
           "order_amount = #{orderAmount,jdbcType=VARCHAR},",
@@ -118,6 +119,7 @@ public interface PaymentOrderMapper {
           "serial_id = #{serialId,jdbcType=VARCHAR},",
           "serial_status = #{serialStatus,jdbcType=VARCHAR},",
           "serial_packet = #{serialPacket,jdbcType=VARCHAR},",
+          "refund_amount = #{refundAmount,jdbcType=VARCHAR},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP}",
         "where order_id = #{orderId,jdbcType=VARCHAR}"
@@ -126,8 +128,7 @@ public interface PaymentOrderMapper {
 
     // 用户订单查询
     @Select({
-            "select * from payment_order",
-            "where card_no = #{cardNo} and card_type = #{cardType} "
+            "select * from t_payment_order where card_no = #{cardNo} and card_type = #{cardType} "
     })
     @Results({
             @Result(column="order_id", property="orderId", jdbcType=JdbcType.VARCHAR, id=true),
@@ -145,16 +146,15 @@ public interface PaymentOrderMapper {
             @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
-            @Result(column="create_user", property="createUser", jdbcType=JdbcType.VARCHAR),
-            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
-            @Result(column="update_user", property="updateUser", jdbcType=JdbcType.VARCHAR)
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
     List<PaymentOrder> selectByCard(Map<String, Object> hashMap);
 
     // 用户订单查询
     @Select({
-            "select * from payment_order where goods_id = #{goodsId} LIMIT 1 "
+            "select * from t_payment_order where goods_id = #{goodsId} LIMIT 1 "
     })
     @Results({
             @Result(column="order_id", property="orderId", jdbcType=JdbcType.VARCHAR, id=true),
@@ -172,10 +172,9 @@ public interface PaymentOrderMapper {
             @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
             @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
-            @Result(column="create_user", property="createUser", jdbcType=JdbcType.VARCHAR),
-            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
-            @Result(column="update_user", property="updateUser", jdbcType=JdbcType.VARCHAR)
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
     PaymentOrder selectByGoodsId(String goodsId);
 }

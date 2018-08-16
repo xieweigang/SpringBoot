@@ -7,11 +7,11 @@ public class PaymentRefundSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String insertSelective(PaymentRefund record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("payment_refund");
+        sql.INSERT_INTO("t_payment_refund");
         
         if (record.getRefundId() != null) {
             sql.VALUES("refund_id", "#{refundId,jdbcType=VARCHAR}");
@@ -19,6 +19,10 @@ public class PaymentRefundSqlProvider {
         
         if (record.getOrderId() != null) {
             sql.VALUES("order_id", "#{orderId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUniqueId() != null) {
+            sql.VALUES("unique_id", "#{uniqueId,jdbcType=VARCHAR}");
         }
         
         if (record.getRefundType() != null) {
@@ -62,14 +66,18 @@ public class PaymentRefundSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String updateByPrimaryKeySelective(PaymentRefund record) {
         SQL sql = new SQL();
-        sql.UPDATE("payment_refund");
+        sql.UPDATE("t_payment_refund");
         
         if (record.getOrderId() != null) {
             sql.SET("order_id = #{orderId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUniqueId() != null) {
+            sql.SET("unique_id = #{uniqueId,jdbcType=VARCHAR}");
         }
         
         if (record.getRefundType() != null) {

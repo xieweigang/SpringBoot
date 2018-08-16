@@ -30,7 +30,7 @@
         var kh = [[${kh}]];
         var klx = [[${klx}]];
         // 页面标题
-        $("title").html("门诊缴费");
+        $("title").html("选择就诊人");
         // 卡号和卡类型输入
         $("#kh").val(kh);
         var cardType = ['0', '2', '3'];
@@ -67,7 +67,7 @@
         $("#btn1").click(function () {
             var kh = $("#kh").val();
             var klx = $("#klx").attr('data-attribute');
-            window.location.href = "../beInHospital/beInHospitalList.htm?kh=" + kh + "&klx=" + klx;
+            window.location.href = "../public/loginDo.htm?kh=" + kh + "&klx=" + klx;
         });
     });
     /*]]>*/

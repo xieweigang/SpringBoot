@@ -25,6 +25,6 @@ public class Swagger2 {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("SpringBoot 测试").description("SpringBoot 测试").termsOfServiceUrl("").version("1.0").build();
+        return new ApiInfoBuilder().title("绍兴市妇幼保健院").description("对外接口").termsOfServiceUrl("").version("1.0").build();
     }
 }

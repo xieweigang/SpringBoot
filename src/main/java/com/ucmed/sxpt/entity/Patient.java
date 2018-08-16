@@ -11,7 +11,7 @@ public class Patient {
     /**
      * 用户id
      */
-    private String userId;
+    private Integer userId;
 
     /**
      * 卡号
@@ -73,7 +73,7 @@ public class Patient {
      * 用户id
      * @return user_id 用户id
      */
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -81,8 +81,8 @@ public class Patient {
      * 用户id
      * @param userId 用户id
      */
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     /**

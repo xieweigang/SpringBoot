@@ -1,5 +1,7 @@
 package com.ucmed.sxpt.util;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ucmed.sxpt.web.FPaymentController;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -177,7 +179,15 @@ public class HttpUtil {
      * 工具类测试
      */
     public static void main(String[] args) {
-        String resString = HttpUtil.getInstance().GET("http://192.168.0.30:32505/Student/select?id=1");
-        LOG.info(resString);
+        JSONObject req = new JSONObject();
+        req.put("uniqueId", "319415343265998526013");
+        req.put("orderId", "319415343265998526011");
+        req.put("refundType", "1");
+        req.put("refundAmount", "1");
+        req.put("sign", PaymentConfig.getSign(req));
+        String reqString = req.toString();
+        System.out.println(reqString);
+        String resString = HttpUtil.getInstance().POST(GlobalConstants.WEB_URL + "/api-payment/refund", reqString);
+        System.out.println(resString);
     }
 }

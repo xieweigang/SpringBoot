@@ -6,11 +6,11 @@
     <div class="iblock imargin-buttom-10" th:if="${payList.size()}==0">
         <div class="iline">没有查到相关的信息</div>
     </div>
-    <div class="iblock imargin-buttom-10" th:each="pay:${payList}" th:attr="data-attr=${pay.orderId}"
-         th:attr="data-amount=${pay.orderAmount}">
+    <div class="iblock imargin-buttom-10" th:each="pay:${payList}"
+         th:attr="data-attr=${pay.orderId},data-amount=${pay.orderAmount}">
         <div class="ipandding-10">
             <div class="iclearfix">
-                <div class="ifloat-left iwidth70 itext-gray" th:text="${pay.businessName}">门诊缴费</div>
+                <div class="ifloat-left iwidth70 itext-gray" th:text="${pay.orderTitle}">门诊缴费</div>
                 <div class="ifloat-right iwidth30 itext-right">￥<span th:text="${pay.orderAmount}">0.01</span>元</div>
             </div>
             <div class="iclearfix">
@@ -30,13 +30,17 @@
         $("title").html("支付列表");
         $(".iblock").click(function () {
             var orderId = $(this).attr('data-attr');
-            var amount = $(this).attr('data-amount');
+            var refundAmount = $(this).attr('data-amount');
             if (orderId != null && orderId != "") {
-                $.post("../payment/payRefund.htm", {
+                console.info("2");
+                $.post("../api/payRefund.htm", {
                     orderId: orderId,
-                    amount: amount
+                    refundType: 1,
+                    refundAmount: refundAmount
                 }, function (res) {
-                    if (res.returnCode == 0) {
+                    console.info("324");
+                    console.info(res);
+                    if (res.returnCode == 200) {
                         window.location.reload();
                     } else {
                         layer.msg(res.returnInfo);

@@ -1,8 +1,10 @@
 package com.ucmed.sxpt.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.thymeleaf.util.StringUtils;
 
 import java.text.DecimalFormat;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,5 +40,15 @@ public class GlobalConstants {
         val = val.replaceAll("0+?$", "");//去掉多余的0
         val = val.replaceAll("[.]$", "");//如最后一位是.则去掉
         return val;
+    }
+
+    // 支付退款结果报文校验
+    public static JSONObject MapToJson(Map<String, String> map) {
+        // 生产退款报文
+        JSONObject json = new JSONObject();
+        for (Map.Entry<String, String> mapEntry : map.entrySet()) {
+            json.put(mapEntry.getKey(), mapEntry.getValue());
+        }
+        return json;
     }
 }

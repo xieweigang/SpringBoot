@@ -7,7 +7,8 @@ import java.util.Map;
 
 public class HttpApi {
     private static final Logger LOG = Logger.getLogger(HttpApi.class);
-    private static final String URL = "http://192.168.12.196:8081/wxserver/n_wxserver.asmx";
+    //private static final String URL = "http://192.168.12.196:8081/wxserver/n_wxserver.asmx"; // 内网地址
+    private static final String URL = "http://115.239.180.30:8081/wxserver/n_wxserver.asmx"; // 银联前置
     private static final String CONTENT_TYPE = "text/xml";
     private static final String CHARSET = "UTF-8";
     private static HttpApi mInstance;

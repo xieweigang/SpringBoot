@@ -14,55 +14,56 @@ import org.apache.ibatis.type.JdbcType;
 public interface PaymentRefundMapper {
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Delete({
-        "delete from payment_refund",
+        "delete from t_payment_refund",
         "where refund_id = #{refundId,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(String refundId);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Insert({
-        "insert into payment_refund (refund_id, order_id, ",
-        "refund_type, refund_amount, ",
-        "refund_status, trade_type, ",
-        "serial_id, serial_status, ",
-        "serial_packet, create_time, ",
-        "update_time)",
+        "insert into t_payment_refund (refund_id, order_id, ",
+        "unique_id, refund_type, ",
+        "refund_amount, refund_status, ",
+        "trade_type, serial_id, ",
+        "serial_status, serial_packet, ",
+        "create_time, update_time)",
         "values (#{refundId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, ",
-        "#{refundType,jdbcType=VARCHAR}, #{refundAmount,jdbcType=VARCHAR}, ",
-        "#{refundStatus,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, ",
-        "#{serialId,jdbcType=VARCHAR}, #{serialStatus,jdbcType=VARCHAR}, ",
-        "#{serialPacket,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, ",
-        "#{updateTime,jdbcType=TIMESTAMP})"
+        "#{uniqueId,jdbcType=VARCHAR}, #{refundType,jdbcType=VARCHAR}, ",
+        "#{refundAmount,jdbcType=VARCHAR}, #{refundStatus,jdbcType=VARCHAR}, ",
+        "#{tradeType,jdbcType=VARCHAR}, #{serialId,jdbcType=VARCHAR}, ",
+        "#{serialStatus,jdbcType=VARCHAR}, #{serialPacket,jdbcType=VARCHAR}, ",
+        "#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})"
     })
     int insert(PaymentRefund record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @InsertProvider(type=PaymentRefundSqlProvider.class, method="insertSelective")
     int insertSelective(PaymentRefund record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Select({
         "select",
-        "refund_id, order_id, refund_type, refund_amount, refund_status, trade_type, ",
+        "refund_id, order_id, unique_id, refund_type, refund_amount, refund_status, trade_type, ",
         "serial_id, serial_status, serial_packet, create_time, update_time",
-        "from payment_refund",
+        "from t_payment_refund",
         "where refund_id = #{refundId,jdbcType=VARCHAR}"
     })
     @Results({
         @Result(column="refund_id", property="refundId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="order_id", property="orderId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="unique_id", property="uniqueId", jdbcType=JdbcType.VARCHAR),
         @Result(column="refund_type", property="refundType", jdbcType=JdbcType.VARCHAR),
         @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
         @Result(column="refund_status", property="refundStatus", jdbcType=JdbcType.VARCHAR),
@@ -77,18 +78,19 @@ public interface PaymentRefundMapper {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @UpdateProvider(type=PaymentRefundSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(PaymentRefund record);
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     @Update({
-        "update payment_refund",
+        "update t_payment_refund",
         "set order_id = #{orderId,jdbcType=VARCHAR},",
+          "unique_id = #{uniqueId,jdbcType=VARCHAR},",
           "refund_type = #{refundType,jdbcType=VARCHAR},",
           "refund_amount = #{refundAmount,jdbcType=VARCHAR},",
           "refund_status = #{refundStatus,jdbcType=VARCHAR},",
@@ -101,4 +103,24 @@ public interface PaymentRefundMapper {
         "where refund_id = #{refundId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(PaymentRefund record);
+
+    // 根据退款唯一号查询退款
+    @Select({
+            "select * from t_payment_refund where unique_id = #{uniqueId}"
+    })
+    @Results({
+            @Result(column="refund_id", property="refundId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="order_id", property="orderId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="unique_id", property="uniqueId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_type", property="refundType", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_amount", property="refundAmount", jdbcType=JdbcType.VARCHAR),
+            @Result(column="refund_status", property="refundStatus", jdbcType=JdbcType.VARCHAR),
+            @Result(column="trade_type", property="tradeType", jdbcType=JdbcType.VARCHAR),
+            @Result(column="serial_id", property="serialId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="serial_status", property="serialStatus", jdbcType=JdbcType.VARCHAR),
+            @Result(column="serial_packet", property="serialPacket", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+    })
+    PaymentRefund selectByUniqueId(String uniqueId);
 }

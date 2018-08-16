@@ -7,18 +7,18 @@ public class PatientSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String insertSelective(Patient record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("patient");
+        sql.INSERT_INTO("t_patient");
         
         if (record.getId() != null) {
             sql.VALUES("id", "#{id,jdbcType=INTEGER}");
         }
         
         if (record.getUserId() != null) {
-            sql.VALUES("user_id", "#{userId,jdbcType=VARCHAR}");
+            sql.VALUES("user_id", "#{userId,jdbcType=INTEGER}");
         }
         
         if (record.getCardNo() != null) {
@@ -58,14 +58,14 @@ public class PatientSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String updateByPrimaryKeySelective(Patient record) {
         SQL sql = new SQL();
-        sql.UPDATE("patient");
+        sql.UPDATE("t_patient");
         
         if (record.getUserId() != null) {
-            sql.SET("user_id = #{userId,jdbcType=VARCHAR}");
+            sql.SET("user_id = #{userId,jdbcType=INTEGER}");
         }
         
         if (record.getCardNo() != null) {

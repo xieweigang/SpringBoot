@@ -7,11 +7,11 @@ public class PaymentOrderSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String insertSelective(PaymentOrder record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("payment_order");
+        sql.INSERT_INTO("t_payment_order");
         
         if (record.getOrderId() != null) {
             sql.VALUES("order_id", "#{orderId,jdbcType=VARCHAR}");
@@ -73,6 +73,10 @@ public class PaymentOrderSqlProvider {
             sql.VALUES("serial_packet", "#{serialPacket,jdbcType=VARCHAR}");
         }
         
+        if (record.getRefundAmount() != null) {
+            sql.VALUES("refund_amount", "#{refundAmount,jdbcType=VARCHAR}");
+        }
+        
         if (record.getCreateTime() != null) {
             sql.VALUES("create_time", "#{createTime,jdbcType=TIMESTAMP}");
         }
@@ -86,11 +90,11 @@ public class PaymentOrderSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-11
+     * @mbg.generated
      */
     public String updateByPrimaryKeySelective(PaymentOrder record) {
         SQL sql = new SQL();
-        sql.UPDATE("payment_order");
+        sql.UPDATE("t_payment_order");
         
         if (record.getOrderType() != null) {
             sql.SET("order_type = #{orderType,jdbcType=VARCHAR}");
@@ -146,6 +150,10 @@ public class PaymentOrderSqlProvider {
         
         if (record.getSerialPacket() != null) {
             sql.SET("serial_packet = #{serialPacket,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getRefundAmount() != null) {
+            sql.SET("refund_amount = #{refundAmount,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateTime() != null) {
