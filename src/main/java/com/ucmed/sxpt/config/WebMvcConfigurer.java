@@ -21,9 +21,10 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加拦截规则
         // 只有用户登录过后才能访问资源
-        registry.addInterceptor(new UserInterceptor()).addPathPatterns("/clinic/**").addPathPatterns("/beInHospital/**")
-                .addPathPatterns("/payment/**")
-                .excludePathPatterns("/payment/payRefund.htm");
+        registry.addInterceptor(new UserInterceptor())
+                .addPathPatterns("/clinic/**")
+                .addPathPatterns("/beInHospital/**")
+                .addPathPatterns("/payment/**");
         super.addInterceptors(registry);
     }
 }

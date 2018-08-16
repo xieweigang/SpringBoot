@@ -185,7 +185,9 @@ public class HttpUtil {
         req.put("refundType", "1");
         req.put("refundAmount", "1");
         req.put("sign", PaymentConfig.getSign(req));
-        String resString = HttpUtil.getInstance().POST("http://localhost:8080/payment/payRefund.htm", req.toString());
+        String reqString = req.toString();
+        System.out.println(reqString);
+        String resString = HttpUtil.getInstance().POST(GlobalConstants.WEB_URL + "/api-payment/refund", reqString);
         System.out.println(resString);
     }
 }
